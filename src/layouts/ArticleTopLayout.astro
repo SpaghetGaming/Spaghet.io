@@ -38,16 +38,16 @@ const repoUrl = collection === "projects" ? data.repoUrl : null
       {readingTime(body)}
     </div>
   </div>
-  <h1 class="text-3xl font-semibold text-black dark:text-white mt-2">
+  <h1 class="text-3xl font-semibold text-spaghetti-brown dark:text-spaghetti-brown mt-2">
     {title}
   </h1>
-  <div class="mt-1">
+  <div class="mt-1 text-spaghetti-brown dark:text-spaghetti-brown">
     {summary}
   </div>
   {(demoUrl || repoUrl) && 
   <div class="mt-4 flex flex-wrap gap-2">
     {demoUrl && 
-      <a href={demoUrl} target="_blank" class="group flex gap-2 items-center px-3 py-1.5 truncate rounded text-xs md:text-sm lg:text-base border border-black/25 dark:border-white/25 hover:bg-black/5 hover:dark:bg-white/15 blend">
+      <a href={demoUrl} target="_blank" class="group flex gap-2 items-center px-3 py-1.5 truncate rounded text-xs md:text-sm lg:text-base border border-spaghetti-yellow/50 dark:border-spaghetti-yellow/50 hover:bg-spaghetti-yellow/20 hover:dark:bg-spaghetti-yellow/20 blend text-spaghetti-brown dark:text-spaghetti-brown">
         <svg class="size-4">
           <use href="/ui.svg#globe" class="fill-current group-hover:fill-black group-hover:dark:fill-white blend"/>
         </svg>
@@ -57,7 +57,7 @@ const repoUrl = collection === "projects" ? data.repoUrl : null
       </a>
     }
     {repoUrl && 
-      <a href={repoUrl} target="_blank" class="group flex gap-2 items-center px-3 py-1.5 truncate rounded text-xs md:text-sm lg:text-base border border-black/25 dark:border-white/25 hover:bg-black/5 hover:dark:bg-white/15 blend">
+      <a href={repoUrl} target="_blank" class="group flex gap-2 items-center px-3 py-1.5 truncate rounded text-xs md:text-sm lg:text-base border border-spaghetti-yellow/50 dark:border-spaghetti-yellow/50 hover:bg-spaghetti-yellow/20 hover:dark:bg-spaghetti-yellow/20 blend text-spaghetti-brown dark:text-spaghetti-brown">
         <svg class="size-4">
           <use href="/ui.svg#link" class="fill-current group-hover:fill-black group-hover:dark:fill-white blend"/>
         </svg>

@@ -13,8 +13,44 @@ export default {
         DEFAULT: {
           css: {
             maxWidth: "full",
+            "--tw-prose-body": "var(--spaghetti-brown)",
+            "--tw-prose-headings": "var(--spaghetti-brown)",
+            "--tw-prose-lead": "var(--spaghetti-brown)",
+            "--tw-prose-links": "var(--spaghetti-red)",
+            "--tw-prose-bold": "var(--spaghetti-brown)",
+            "--tw-prose-counters": "var(--spaghetti-brown)",
+            "--tw-prose-bullets": "var(--spaghetti-brown)",
+            "--tw-prose-hr": "var(--spaghetti-brown)",
+            "--tw-prose-quotes": "var(--spaghetti-brown)",
+            "--tw-prose-quote-border": "var(--spaghetti-yellow)",
+            "--tw-prose-captions": "var(--spaghetti-brown)",
+            "--tw-prose-code": "var(--spaghetti-brown)",
+            "--tw-prose-pre-code": "var(--spaghetti-brown)",
+            "--tw-prose-pre-bg": "var(--spaghetti-cream)",
+            "--tw-prose-th-borders": "var(--spaghetti-brown)",
+            "--tw-prose-td-borders": "var(--spaghetti-brown)",
           },
         },
+        dark: {
+          css: {
+            "--tw-prose-body": "var(--spaghetti-brown)",
+            "--tw-prose-headings": "var(--spaghetti-brown)",
+            "--tw-prose-lead": "var(--spaghetti-brown)",
+            "--tw-prose-links": "var(--spaghetti-red)",
+            "--tw-prose-bold": "var(--spaghetti-brown)",
+            "--tw-prose-counters": "var(--spaghetti-brown)",
+            "--tw-prose-bullets": "var(--spaghetti-brown)",
+            "--tw-prose-hr": "var(--spaghetti-brown)",
+            "--tw-prose-quotes": "var(--spaghetti-brown)",
+            "--tw-prose-quote-border": "var(--spaghetti-yellow)",
+            "--tw-prose-captions": "var(--spaghetti-brown)",
+            "--tw-prose-code": "var(--spaghetti-brown)",
+            "--tw-prose-pre-code": "var(--spaghetti-brown)",
+            "--tw-prose-pre-bg": "var(--spaghetti-cream)",
+            "--tw-prose-th-borders": "var(--spaghetti-brown)",
+            "--tw-prose-td-borders": "var(--spaghetti-brown)",
+          },
+        }
       },
       rotate: {
         "45": "45deg",
@@ -55,6 +91,14 @@ export default {
           },
         },
       },
+      colors: {
+        spaghetti: {
+          yellow: "#FDE68A",
+          red: "#FECACA",
+          cream: "#FEF3C7",
+          brown: "#78350F",
+        }
+      }
     },
   },
   plugins: [require("@tailwindcss/typography")],

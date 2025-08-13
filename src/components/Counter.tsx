@@ -7,10 +7,10 @@ function CounterButton() {
 
   return (
     <div class="flex gap-4 items-center">
-      <button onClick={increment} class="px-3 py-1 border border-black/25 dark:border-white/25 hover:bg-black/5 dark:hover:bg-white/15 blend">
+      <button onClick={increment} class="px-3 py-1 border border-spaghetti-yellow/50 dark:border-spaghetti-yellow/50 hover:bg-spaghetti-yellow/20 dark:hover:bg-spaghetti-yellow/20 blend text-spaghetti-brown">
         Increment
       </button>
-      <div>
+      <div class="text-spaghetti-brown">
        Clicked {count()} {count() === 1 ? "time" : "times"}
       </div>
     </div>

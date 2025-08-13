@@ -4,6 +4,11 @@
 
 :root{
   --copy-btn-margin:10px;
+  /* Pastel Palette Colors for Spaghetti Theme */
+  --spaghetti-yellow: #FDE68A;
+  --spaghetti-red: #FECACA;
+  --spaghetti-cream: #FEF3C7;
+  --spaghetti-brown: #78350F;
 }
 
 @layer base {
@@ -27,7 +32,7 @@
 html {
   overflow-y: scroll;
   color-scheme: light;
-  background-color: white;
+  background-color: var(--spaghetti-cream);
   font-family: "Atkinson", sans-serif;
   
 }
@@ -37,15 +42,37 @@ html.dark {
   background-color: black;
 }
 
+/* Apply pastel cream background to main content areas */
+main {
+  @apply flex flex-col flex-1 bg-spaghetti-cream dark:bg-black;
+}
+
 html,
 body {
   @apply h-full w-full antialiased;
-  @apply bg-white dark:bg-black;
   @apply text-black/75 dark:text-white/75;
+}
+
+/* Pastel Theme Colors */
+.text-spaghetti-yellow {
+  color: var(--spaghetti-yellow);
+}
+
+.text-spaghetti-red {
+  color: var(--spaghetti-red);
+}
+
+.text-spaghetti-brown {
+  color: var(--spaghetti-brown);
+}
+
+.bg-spaghetti-cream {
+  background-color: var(--spaghetti-cream);
 }
 
 body {
   @apply relative flex flex-col;
+  @apply bg-white dark:bg-black;
 }
 
 main {
@@ -69,6 +96,43 @@ header.scrolled {
 
 article {
   @apply prose dark:prose-invert max-w-full pb-12;
+  /* Ensure our theme colors are applied properly in prose */
+  color: var(--spaghetti-brown);
+}
+
+/* Override default prose styles that conflict with our theme */
+.prose {
+  color: var(--spaghetti-brown);
+}
+
+.prose a {
+  color: var(--spaghetti-red);
+}
+
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4,
+.prose h5,
+.prose h6 {
+  color: var(--spaghetti-brown);
+}
+
+.prose code {
+  color: var(--spaghetti-brown);
+}
+
+.prose pre {
+  background-color: var(--spaghetti-cream);
+}
+
+.prose blockquote {
+  border-left-color: var(--spaghetti-yellow);
+}
+
+.prose th,
+.prose td {
+  color: var(--spaghetti-brown);
 }
 
 .page-heading {
