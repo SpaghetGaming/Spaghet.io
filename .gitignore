@@ -6,12 +6,16 @@ dist/
 
 # dependencies
 node_modules/
+.vscode/
 
 # logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
+
+# settings
+settings.json
 
 # environment variables
 .env
