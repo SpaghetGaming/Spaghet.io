@@ -9,8 +9,7 @@ tags:
 - Authentication
 - Database
 - API
-demoUrl: https://appwrite.io
-repoUrl: https://github.com/yourusername/appwrite-integration
+demoUrl: https://appdev.spaghet.io/
 ---
 
 Implementation of Appwrite as a backend solution for modern web applications. This project demonstrates the integration of Appwrite's comprehensive backend services including authentication, database management, file storage, and cloud functions.

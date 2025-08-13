@@ -9,8 +9,8 @@ tags:
 - Tailwind CSS
 - JavaScript
 - TypeScript
-demoUrl: https://spaghet.tech
-repoUrl: https://github.com/yourusername/astro-profile
+demoUrl: https://home.spaghet.io
+repoUrl: https://github.com/spaghetgaming/Spaghet.io
 ---
 
 A modern personal portfolio website showcasing my work, projects, and technical expertise. Built with Astro for optimal performance and SEO, utilizing React components for interactive elements, and styled with Tailwind CSS for responsive design.

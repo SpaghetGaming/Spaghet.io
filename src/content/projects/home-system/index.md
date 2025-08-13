@@ -15,8 +15,6 @@ tags:
 - Node-RED
 - Authentik
 - LDAP
-demoUrl: https://spaghet.io
-repoUrl: https://github.com/yourusername/home-system
 ---
 
 Designed and maintained a scalable Docker container ecosystem supporting PostgreSQL, MariaDB, MySQL, MongoDB, Redis, and Minio for high-availability applications, ensuring robust data storage, caching, and object storage solutions.

@@ -1,85 +1,48 @@
-![Astro Sphere Lighthouse Score](_astrosphere.jpg)
+# Spaghet.io
 
-Astro Sphere is a static, minimalist, lightweight, lightning fast portfolio and blog theme based on my personal website.
+Welcome to my personal website! This site showcases my projects, blog posts, and professional experience. It's built with Astro and hosted using a modern deployment pipeline.
 
-It is primarily Astro, Tailwind and Typescript, with a very small amount of SolidJS for stateful components.
+## Deployment Pipeline
 
-## 📋 Features
+My website follows a robust deployment workflow:
 
-- ✅ 100/100 Lighthouse performance
-- ✅ Responsive
-- ✅ Accessible
-- ✅ SEO-friendly
-- ✅ Typesafe
-- ✅ Minimal style
-- ✅ Light/Dark Theme
-- ✅ Animated UI
-- ✅ Tailwind styling
-- ✅ Auto generated sitemap
-- ✅ Auto generated RSS Feed
-- ✅ Markdown support
-- ✅ MDX Support (components in your markdown)
-- ✅ Searchable content (posts and projects)
-- ✅ Code Blocks - copy to clipboard
+1. **Development**: I develop content and code locally using Gitea as my Git hosting solution
+2. **Auto-push**: Changes are automatically pushed from Gitea to GitHub via configured webhooks
+3. **Hosting**: The site is hosted on Appwrite, which provides a scalable and secure hosting environment
+4. **Delivery**: NGINX reverse proxy handles routing and serves content with optimal performance
 
-## 💯 Lighthouse score
-![Astro Sphere Lighthouse Score](_lighthouse.png)
+This pipeline ensures that my website is always up-to-date with the latest changes while leveraging modern hosting technologies.
 
-## 🕊️ Lightweight
-All pages under 100kb (including fonts)
+## Site Components
 
-## ⚡︎ Fast
-Rendered in ~40ms on localhost
+This website is built using Astro with the following key components:
 
-## 📄 Configuration
+- **Blog**: Articles about technology, development, and personal insights
+- **Projects**: Showcasing my various projects and contributions
+- **Work Experience**: Professional background and career history
+- **Legal**: Privacy policy and terms of service
 
-The blog posts on the demo serve as the documentation and configuration.
+## Technologies Used
 
-## 💻 Commands
+- **Framework**: Astro (Static site generation)
+- **Styling**: Tailwind CSS
+- **TypeScript**: Type-safe development
+- **Deployment**: Gitea → GitHub → Appwrite → NGINX reverse proxy
 
-All commands are run from the root of the project, from a terminal:
+## Getting Started
 
-Replace npm with your package manager of choice. `npm`, `pnpm`, `yarn`, `bun`, etc
+To run this site locally:
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run dev:network`     | Starts dev server on local network               |
-| `npm run sync`            | Generates TypeScript types for all Astro modules.|
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run preview:network` | Starts preview server on local network           |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-| `npm run lint`            | Run ESLint                                       |
-| `npm run lint:fix`        | Auto-fix ESLint issues                           |
+```bash
+# Install dependencies
+npm install
 
-## 🗺️ Roadmap
+# Start development server
+npm run dev
+```
 
-A few features I plan to implement
-- ⬜ Article Pages - Table of Contents
-- ⬜ Article Pages - Share on social media
+For more information about the Astro framework and its features, please refer to the [Astro documentation](https://docs.astro.build/).
 
-## ✨ Acknowledgement
+## License
 
-Theme inspired by [Paco Coursey](https://paco.me/), [Lee Robinson](https://leerob.io/) and [Hayden Bleasel](https://www.haydenbleasel.com/)
-
-
-## 🏛️ License
-
-MIT
-
-
-# 1.0.1 Update
-
-Added ability to run dev and preview on local network.
-added npm run dev:network
-added npm run preview:network
-
-Added slightly more particle density in both light and dark mode.
-
-Added subtle dark mode star and meteor animations.
-
-Removed eslint config
-
+This project is licensed under the MIT License - see the LICENSE file for details.

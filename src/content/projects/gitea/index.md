@@ -9,8 +9,7 @@ tags:
 - CI/CD
 - DevOps
 - Docker
-demoUrl: https://gitea.io
-repoUrl: https://github.com/yourusername/gitea-implementation
+demoUrl: https://gitea.spaghet.io
 ---
 
 Deployment and configuration of Gitea as a self-hosted Git service for version control and continuous integration. This implementation provides a comprehensive solution for managing code repositories, tracking issues, and automating development workflows.
