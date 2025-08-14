@@ -11,9 +11,7 @@ import Container from "@components/Container.astro"
     <div class="relative h-full w-full">
       <div class="absolute left-0 top-1/2 -translate-y-1/2 flex gap-1 font-semibold">
         <a href="/" class="flex gap-1 text-current hover:text-spaghetti-brown dark:hover:text-spaghetti-brown transition-colors duration-300 ease-in-out">
-          <svg class="size-6 fill-current">
-            <use href="/brand.svg#brand"></use>
-          </svg>
+          <img src="${import.meta.env.APPWRITE_ENDPOINT}/v1/storage/buckets/${import.meta.env.APPWRITE_BUCKET_ID}/files/689d265e0036955a618d/view?project=${import.meta.env.APPWRITE_PROJECT_ID}" alt="Logo" class="size-6" />
           <div>
             {SITE.TITLE}
           </div>
