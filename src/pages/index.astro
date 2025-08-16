@@ -1,5 +1,5 @@
 ---
-import { getCollection } from "astro:content"
+import { getBlogPosts, getProjects } from "@lib/appwrite-service";
 import PageLayout from "@layouts/PageLayout.astro"
 import ArrowCard from "@components/ArrowCard"
 import StackCard from "@components/StackCard.astro"
@@ -7,14 +7,15 @@ import { SITE, SOCIALS } from "@consts"
 import TwinklingStars from "@components/TwinklingStars.astro"
 import MeteorShower from "@components/MeteorShower.astro"
 
-const posts = (await getCollection("blog"))
-  .filter(post => !post.data.draft)
-  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+// Fetch blog posts and projects from Appwrite
+const posts = (await getBlogPosts())
+  .filter(post => !post.draft)
+  .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
   .slice(0,3)
 
-const projects = (await getCollection("projects"))
-  .filter(project => !project.data.draft)
-  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+const projects = (await getProjects())
+  .filter(project => !project.draft)
+  .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
   .slice(0,3)
 
 const stack = [
@@ -57,7 +58,7 @@ const stack = [
     <div id='stars3' class='fixed inset-0'></div>
   </div>
 
-  <!-- Dark Theme: Twinkling Stars / Metors -->
+  <!-- Dark Theme: Twinkling Stars / Meteor Shower -->
   <div id="galaxy" class="fixed inset-0">
     <div class="hidden dark:block">
       <TwinklingStars/>
@@ -79,7 +80,7 @@ const stack = [
     <div class="animate absolute h-full w-full flex items-center justify-center">
       <div class='relative w-full h-full flex items-center justify-center'>
         <div class='p-5 text-center'>
-          <img src="/api/image-proxy/689cda7900102e12abf2/689d27a400194d326f69" alt="Quinn Marvin" class="rounded-full w-32 h-32 mx-auto mb-4 border-4 border-spaghetti-red" />
+          <img src='/api/assets/689d27a400194d326f69' alt="Quinn Marvin" class="rounded-full w-32 h-32 mx-auto mb-4 border-4 border-spaghetti-red" />
           <p class='animated text-lg md:text-xl lg:text-2xl font-semibold opacity-75 text-spaghetti-brown'>
             Hello, I am Quinn Marvin
           </p>
@@ -96,7 +97,7 @@ const stack = [
             Supporting PostgreSQL, MariaDB, MySQL, MongoDB, Redis, and Minio
           </p>
           <div id="ctaButtons" class='animated flex flex-wrap gap-4 justify-center mt-5'>
-            <a href='/blog' class='py-2 px-4 rounded truncate text-xs md:text-sm lg:text-base bg-spaghetti-red dark:bg-spaghetti-red text-white dark:text-white hover:opacity-75 blend'>
+            <a href='/blog' class='py-2 px-4 rounded truncate text-xs md:text-sm lg:text-base bg-spaghetti-red dark:bg-spaghetti-red text-spaghetti-brown dark:text-spaghetti-brown hover:opacity-75 blend'>
               Read my blog
             </a>
             <a href='/work' class='py-2 px-4 truncate rounded text-xs md:text-sm lg:text-base border border-spaghetti-yellow/50 dark:border-spaghetti-yellow/50 hover:bg-spaghetti-yellow/20 hover:dark:bg-spaghetti-yellow/20 blend text-spaghetti-brown dark:text-spaghetti-brown'>
@@ -153,7 +154,7 @@ const stack = [
             Website build with
           </p>
           <div class="flex flex-wrap items-center gap-2 mt-5">
-            {stack.map(item => (
+            {stack.map((item) => (
               <StackCard 
                 text={item.text}
                 icon={item.icon}
@@ -205,7 +206,7 @@ const stack = [
             Reach out to me via email or on social media.
           </p>
           <div class="grid grid-cols-4 gap-y-2 mt-4 auto-cols-min">
-            {SOCIALS.map(social => (
+            {SOCIALS.map((social) => (
               <div class="col-span-1 flex items-center gap-1">
                 <span class="whitespace-nowrap truncate">
                   {social.NAME}
@@ -219,6 +220,7 @@ const stack = [
                 </a>
               </div>
             ))}
+          </div>
         </div>
       </section>
     </div>

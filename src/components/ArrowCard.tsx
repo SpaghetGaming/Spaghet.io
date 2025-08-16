@@ -1,34 +1,34 @@
 import { formatDate } from "@lib/utils"
-import type { CollectionEntry } from "astro:content"
+import type { BlogPost, Project } from "@lib/appwrite-service"
 
 type Props = {
-  entry: CollectionEntry<"blog"> | CollectionEntry<"projects">
+  entry: BlogPost | Project
   pill?: boolean
 }
 
 export default function ArrowCard({entry, pill}: Props) {
     return (
-      <a href={`/${entry.collection}/${entry.slug}`} class="group p-4 gap-3 flex items-center border rounded-lg hover:bg-black/5 hover:dark:bg-white/10 border-black/15 dark:border-white/20 transition-colors duration-300 ease-in-out">
+      <a href={`/${entry.$collectionId === 'blog' ? 'blog' : 'projects'}/${entry.$id}`} class="group p-4 gap-3 flex items-center border rounded-lg hover:bg-black/5 hover:dark:bg-white/10 border-black/15 dark:border-white/20 transition-colors duration-300 ease-in-out">
       <div class="w-full group-hover:text-black group-hover:dark:text-white blend">
         <div class="flex flex-wrap items-center gap-2">
           {pill &&
             <div class="text-sm capitalize px-2 py-0.5 rounded-full border border-black/15 dark:border-white/20 bg-spaghetti-yellow/20 dark:bg-spaghetti-yellow/20 text-spaghetti-brown">
-              {entry.collection === "blog" ? "post" : "project"}
+              {entry.$collectionId === "blog" ? "post" : "project"}
             </div>
           }
           <div class="text-sm uppercase">
-            {formatDate(entry.data.date)}
+            {formatDate(entry.date)}
           </div>
         </div>
         <div class="font-semibold mt-3 text-spaghetti-brown">
-          {entry.data.title}
+          {entry.title}
         </div>
 
         <div class="text-sm line-clamp-2 text-spaghetti-brown">
-          {entry.data.summary}
+          {entry.summary}
         </div>
         <ul class="flex flex-wrap mt-2 gap-1">
-          {entry.data.tags.map((tag:string) => ( // this line has an error; Parameter 'tag' implicitly has an 'any' type.ts(7006)
+          {entry.tags.map((tag:string) => (
             <li class="text-xs uppercase py-0.5 px-1 rounded bg-spaghetti-yellow/20 dark:bg-spaghetti-yellow/20 text-spaghetti-brown">
               {tag}
             </li>

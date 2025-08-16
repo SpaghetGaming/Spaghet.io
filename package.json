@@ -3,12 +3,12 @@
   "type": "module",
   "version": "1.0.0",
   "scripts": {
-    "dev": "astro dev",
-    "dev:network": "astro dev --host",
-    "start": "astro dev",
+    "dev": "dotenv -e .env -- astro dev",
+    "dev:network": "dotenv -e .env -- astro dev --host",
+    "start": "dotenv -e .env -- astro dev",
     "build": "astro check && astro build",
-    "preview": "astro preview",
-    "preview:network": "astro dev --host",
+    "preview": "dotenv -e .env -- astro preview",
+    "preview:network": "dotenv -e .env -- astro dev --host",
     "astro": "astro",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
@@ -26,10 +26,15 @@
     "astro": "^5.13.0",
     "clsx": "^2.1.0",
     "fuse.js": "^7.0.0",
+    "notenv": "^2.0.3",
     "sharp": "^0.33.2",
     "solid-js": "^1.8.15",
     "tailwind-merge": "^2.2.1",
     "tailwindcss": "^3.4.1",
+    "ts-node": "^10.9.2",
     "typescript": "^5.3.3"
+  },
+  "devDependencies": {
+    "dotenv-cli": "^10.0.0"
   }
 }

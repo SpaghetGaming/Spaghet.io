@@ -1,30 +1,67 @@
 ---
-import { type CollectionEntry, getCollection } from "astro:content"
 import PageLayout from "@layouts/PageLayout.astro"
 import TopLayout from "@layouts/TopLayout.astro"
 import BottomLayout from "@layouts/BottomLayout.astro"
 import ArticleTopLayout from "@layouts/ArticleTopLayout.astro"
 import ArticleBottomLayout from "@layouts/ArticleBottomLayout.astro"
+import { getProjectById } from "@lib/appwrite-service"
+import type { ProjectCollectionEntry } from "@types/appwrite"
 
 // Create the static projects pages
 export async function getStaticPaths() {
-	const projects = await getCollection("projects")
-	return projects.map((project) => ({
-		params: { slug: project.slug },
-		props: project,
-	}))
+  // This will be replaced with Appwrite data in the future
+  return []
+}
+
+// Helper function to map Appwrite document to CollectionEntry format
+function mapAppwriteProjectToCollectionEntry(project: any): ProjectCollectionEntry {
+  return {
+    id: project.$id,
+    slug: project.$id, // Using ID as slug since we don't have a proper slug field
+    body: project.content,
+    collection: "projects",
+    data: {
+      title: project.title,
+      summary: project.summary,
+      date: new Date(project.date),
+      tags: project.tags,
+      draft: project.draft,
+      demoUrl: project.demoUrl,
+      repoUrl: project.repoUrl,
+      content: project.content
+    },
+    render: async () => {
+      // This is a minimal implementation for the render function that matches the expected structure
+      return {
+        Content: () => {},
+        headings: [],
+        remarkPluginFrontmatter: {}
+      };
+    }
+  };
 }
 
 // Get the requested project
-type Props = CollectionEntry<"projects">
-const project = Astro.props
-const { title, summary } = project.data
+const slug = Astro.params.slug
+const project = await getProjectById(slug)
+  .then(projectData => {
+    if (projectData) {
+      return mapAppwriteProjectToCollectionEntry(projectData);
+    }
+    return null;
+  })
+  .catch(error => {
+    console.error("Error fetching project:", error);
+    return null;
+  })
+
+const { title, summary } = project?.data || { title: "Project not found", summary: "" }
 ---
 
 <PageLayout title={title} description={summary}>
   <TopLayout>
     <div class="animate">
-      <ArticleTopLayout entry={project} />
+      <ArticleTopLayout entry={project}/>
     </div>
   </TopLayout>
   <BottomLayout>

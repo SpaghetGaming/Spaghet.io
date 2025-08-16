@@ -1,16 +1,22 @@
 ---
-import { getCollection } from "astro:content"
 import PageLayout from "@layouts/PageLayout.astro"
 import TopLayout from "@layouts/TopLayout.astro"
 import BottomLayout from "@layouts/BottomLayout.astro"
 import Blog from "@components/Blog"
 import { BLOG } from "@consts"
+import { getBlogPosts } from "@lib/appwrite-service"
+import type { BlogPost } from "@types/appwrite"
 
-const posts = (await getCollection("blog"))
-  .filter(post => !post.data.draft)
-  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+const posts = await getBlogPosts()
+  .then(blogPosts => {
+    return blogPosts;
+  })
+  .catch(error => {
+    console.error("Error fetching blog posts:", error);
+    return [];
+  })
 
-const tags = [...new Set(posts.flatMap(post => post.data.tags))]
+const tags = [...new Set(posts.flatMap(post => post.tags))]
   .sort((a, b) => a.localeCompare(b))
 ---
 
@@ -26,5 +32,3 @@ const tags = [...new Set(posts.flatMap(post => post.data.tags))]
     </div>
   </BottomLayout>
 </PageLayout>
-
-

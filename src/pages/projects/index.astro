@@ -1,14 +1,39 @@
 ---
-import { getCollection } from "astro:content"
 import PageLayout from "@layouts/PageLayout.astro"
 import TopLayout from "@layouts/TopLayout.astro"
 import BottomLayout from "@layouts/BottomLayout.astro"
 import Projects from "@components/Projects"
 import { PROJECTS } from "@consts"
+import { getProjects } from "@lib/appwrite-service"
+import type { Project } from "@types/appwrite"
 
-const projects = (await getCollection("projects"))
-  .filter(project => !project.data.draft)
-  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+// Helper function to map Appwrite project document to CollectionEntry format
+function mapAppwriteProjectToCollectionEntry(project: Project) {
+  return {
+    $id: project.$id,
+    $collectionId: "projects",
+    data: {
+      title: project.title,
+      summary: project.summary,
+      date: new Date(project.date),
+      tags: project.tags,
+      draft: project.draft,
+      demoUrl: project.demoUrl,
+      repoUrl: project.repoUrl,
+      content: project.content,
+      image: project.image
+    }
+  };
+}
+
+const projects = await getProjects()
+  .then(projectList => {
+    return projectList.map(project => mapAppwriteProjectToCollectionEntry(project));
+  })
+  .catch(error => {
+    console.error("Error fetching projects:", error);
+    return [];
+  })
 
 const tags = [...new Set(projects.flatMap(project => project.data.tags))]
   .sort((a, b) => a.localeCompare(b))

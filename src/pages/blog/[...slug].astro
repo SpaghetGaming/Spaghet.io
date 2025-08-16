@@ -1,24 +1,59 @@
 ---
-import { type CollectionEntry, getCollection } from "astro:content"
 import PageLayout from "@layouts/PageLayout.astro"
 import TopLayout from "@layouts/TopLayout.astro"
 import BottomLayout from "@layouts/BottomLayout.astro"
 import ArticleTopLayout from "@layouts/ArticleTopLayout.astro"
 import ArticleBottomLayout from "@layouts/ArticleBottomLayout.astro"
+import { getBlogPostById } from "@lib/appwrite-service"
+import type { BlogCollectionEntry } from "@types/appwrite"
 
 // Create the static blog pages
 export async function getStaticPaths() {
-	const posts = await getCollection("blog")
-	return posts.map((post) => ({
-		params: { slug: post.slug },
-		props: post,
-	}))
+  // This will be replaced with Appwrite data in the future
+  return []
+}
+
+// Helper function to map Appwrite document to CollectionEntry format
+function mapAppwriteBlogToCollectionEntry(post: any): BlogCollectionEntry {
+  return {
+    id: post.$id,
+    slug: post.$id, // Using ID as slug since we don't have a proper slug field
+    body: post.content,
+    collection: "blog",
+    data: {
+      title: post.title,
+      summary: post.summary,
+      date: new Date(post.date),
+      tags: JSON.parse(post.tags),
+      draft: post.draft,
+      content: post.content
+    },
+    render: async () => {
+      // This is a minimal implementation for the render function that matches the expected structure
+      return {
+        Content: () => {},
+        headings: [],
+        remarkPluginFrontmatter: {}
+      };
+    }
+  };
 }
 
 // Get the requested post
-type Props = CollectionEntry<"blog">
-const post = Astro.props
-const { title, summary } = post.data
+const slug = Astro.params.slug
+const post = await getBlogPostById(slug)
+  .then(blogPost => {
+    if (blogPost) {
+      return mapAppwriteBlogToCollectionEntry(blogPost);
+    }
+    return null;
+  })
+  .catch(error => {
+    console.error("Error fetching blog post:", error);
+    return null;
+  })
+
+const { title, summary } = post?.data || { title: "Post not found", summary: "" }
 ---
 
 <PageLayout title={title} description={summary}>
