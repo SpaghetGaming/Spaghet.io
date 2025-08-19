@@ -18,7 +18,7 @@ function mapAppwriteProjectToCollectionEntry(project: any): ProjectCollectionEnt
   return {
     id: project.$id,
     slug: project.$id, // Using ID as slug since we don't have a proper slug field
-    body: project.content,
+    body: project.contentHtml || project.content, // Use converted HTML content
     collection: "projects",
     data: {
       title: project.title,
@@ -28,7 +28,7 @@ function mapAppwriteProjectToCollectionEntry(project: any): ProjectCollectionEnt
       draft: project.draft,
       demoUrl: project.demoUrl,
       repoUrl: project.repoUrl,
-      content: project.content
+      content: project.contentHtml || project.content // Use converted HTML content
     },
     render: async () => {
       // This is a minimal implementation for the render function that matches the expected structure

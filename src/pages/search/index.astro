@@ -1,18 +1,62 @@
 ---
-import { type CollectionEntry, getCollection } from "astro:content"
+import { getBlogPosts, getProjects } from "@lib/appwrite-service"
 import PageLayout from "@layouts/PageLayout.astro"
 import TopLayout from "@layouts/TopLayout.astro"
 import BottomLayout from "@layouts/BottomLayout.astro"
 import Search from "@components/Search"
 import { SEARCH } from "@consts"
+import type { BlogPost, Project } from "@lib/appwrite-service"
 
-const posts = (await getCollection("blog"))
-  .filter(post => !post.data.draft)
+// Get all blog posts and projects from Appwrite
+const posts = (await getBlogPosts())
+  .filter(post => !post.draft)
 
-const projects = (await getCollection("projects"))
-  .filter(post => !post.data.draft)
+const projects = (await getProjects())
+  .filter(project => !project.draft)
 
-const data = [...posts, ...projects] as CollectionEntry<"blog">[]
+// Create unified data array for search - need to convert to proper format expected by Search component
+const searchData = [
+  ...posts.map(post => ({
+    id: post.$id,
+    slug: post.$id,
+    body: post.contentHtml || post.content,
+    collection: "blog",
+    data: {
+      title: post.title,
+      summary: post.summary,
+      date: new Date(post.date),
+      tags: post.tags,
+      draft: post.draft,
+      content: post.contentHtml || post.content
+    },
+    render: async () => ({
+      Content: () => {},
+      headings: [],
+      remarkPluginFrontmatter: {}
+    })
+  })),
+  ...projects.map(project => ({
+    id: project.$id,
+    slug: project.$id,
+    body: project.contentHtml || project.content,
+    collection: "projects",
+    data: {
+      title: project.title,
+      summary: project.summary,
+      date: new Date(project.date),
+      tags: project.tags,
+      draft: project.draft,
+      demoUrl: project.demoUrl,
+      repoUrl: project.repoUrl,
+      content: project.contentHtml || project.content
+    },
+    render: async () => ({
+      Content: () => {},
+      headings: [],
+      remarkPluginFrontmatter: {}
+    })
+  }))
+]
 ---
 
 <PageLayout title={SEARCH.TITLE} description={SEARCH.DESCRIPTION}>
@@ -23,7 +67,7 @@ const data = [...posts, ...projects] as CollectionEntry<"blog">[]
   </TopLayout>
   <BottomLayout>
     <div class="animate">
-      <Search client:load data={data}/>
+      <Search client:load data={searchData}/>
     </div>
   </BottomLayout>
 </PageLayout>

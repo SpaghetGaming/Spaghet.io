@@ -1,18 +1,21 @@
-import type { CollectionEntry } from "astro:content"
+import type { BlogPost, Project } from "@lib/appwrite-service"
 import { createEffect, createSignal } from "solid-js"
 import Fuse from "fuse.js"
 import ArrowCard from "@components/ArrowCard"
 
+// Define a unified type for search results
+type SearchEntry = BlogPost | Project
+
 type Props = {
-  data: CollectionEntry<"blog">[]
+  data: SearchEntry[]
 }
 
 export default function Search({data}: Props) {
   const [query, setQuery] = createSignal("")
-  const [results, setResults] = createSignal<CollectionEntry<"blog">[]>([])
+  const [results, setResults] = createSignal<SearchEntry[]>([])
 
   const fuse = new Fuse(data, {
-    keys: ["slug", "data.title", "data.summary", "data.tags"],
+    keys: ["$id", "title", "summary", "tags"],
     includeMatches: true,
     minMatchCharLength: 2,
     threshold: 0.4,

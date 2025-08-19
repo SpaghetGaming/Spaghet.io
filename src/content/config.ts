@@ -18,6 +18,8 @@ const blog = defineCollection({
     date: z.coerce.date(),
     tags: z.array(z.string()),
     draft: z.boolean().optional(),
+    template: z.string().optional(), // Add template field
+    featured: z.boolean().optional(), // Add featured field
   }),
 })
 

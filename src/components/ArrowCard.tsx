@@ -2,7 +2,7 @@ import { formatDate } from "@lib/utils"
 import type { BlogPost, Project } from "@lib/appwrite-service"
 
 type Props = {
-  entry: BlogPost | Project
+  entry: BlogPost | Project | any
   pill?: boolean
 }
 

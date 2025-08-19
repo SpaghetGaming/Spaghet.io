@@ -10,6 +10,8 @@ export type BlogPost = Models.Document & {
   draft: boolean;
   content: string;
   image?: string; // File ID for the featured image
+  template: string; // e.g., "default", "feature", "news"
+  featured: boolean;
 };
 
 export type Project = Models.Document & {
@@ -22,6 +24,8 @@ export type Project = Models.Document & {
   repoUrl?: string;
   content: string;
   image?: string; // File ID for the featured image
+  template: string; // e.g., "default", "feature"
+  featured: boolean;
 };
 
 export type WorkExperience = Models.Document & {

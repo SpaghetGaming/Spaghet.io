@@ -31,7 +31,7 @@ const work = await getWorkExperiences()
   })
 
 function formatWorkDate(input: Date | string) {
-  if (typeof input === "string") return input
+  if (typeof input === "string") input = new Date(input)
 
   const month = input.toLocaleDateString("en-US", {
     month: "short",

@@ -18,7 +18,7 @@ function mapAppwriteBlogToCollectionEntry(post: any): BlogCollectionEntry {
   return {
     id: post.$id,
     slug: post.$id, // Using ID as slug since we don't have a proper slug field
-    body: post.content,
+    body: post.contentHtml || post.content, // Use converted HTML content
     collection: "blog",
     data: {
       title: post.title,
@@ -26,7 +26,7 @@ function mapAppwriteBlogToCollectionEntry(post: any): BlogCollectionEntry {
       date: new Date(post.date),
       tags: JSON.parse(post.tags),
       draft: post.draft,
-      content: post.content
+      content: post.contentHtml || post.content // Use converted HTML content
     },
     render: async () => {
       // This is a minimal implementation for the render function that matches the expected structure
