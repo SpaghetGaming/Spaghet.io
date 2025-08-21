@@ -4,38 +4,28 @@ import TopLayout from "@layouts/TopLayout.astro"
 import BottomLayout from "@layouts/BottomLayout.astro"
 import Projects from "@components/Projects"
 import { PROJECTS } from "@consts"
-import { getProjects } from "@lib/appwrite-service"
-import type { Project } from "@types/appwrite"
+import { getProjectsPaginated } from "@lib/appwrite-service"
 
-// Helper function to map Appwrite project document to CollectionEntry format
-function mapAppwriteProjectToCollectionEntry(project: Project) {
-  return {
-    $id: project.$id,
-    $collectionId: "projects",
-    data: {
-      title: project.title,
-      summary: project.summary,
-      date: new Date(project.date),
-      tags: project.tags,
-      draft: project.draft,
-      demoUrl: project.demoUrl,
-      repoUrl: project.repoUrl,
-      content: project.content,
-      image: project.image
-    }
-  };
-}
 
-const projects = await getProjects()
-  .then(projectList => {
-    return projectList.map(project => mapAppwriteProjectToCollectionEntry(project));
+// Get page and limit from URL parameters
+const url = new URL(typeof window !== 'undefined' ? window.location.href : 'http://localhost')
+const pageParam = url.searchParams.get('page') || '1'
+const limitParam = url.searchParams.get('limit') || '10'
+const page = parseInt(pageParam)
+const limit = parseInt(limitParam)
+
+// Fetch paginated projects
+const { posts, total } = await getProjectsPaginated(page, limit)
+  .then(result => {
+    return result;
   })
   .catch(error => {
     console.error("Error fetching projects:", error);
-    return [];
+    return { posts: [], total: 0 };
   })
 
-const tags = [...new Set(projects.flatMap(project => project.data.tags))]
+// Get all tags for filtering
+const tags = [...new Set(posts.flatMap(project => project.tags))]
   .sort((a, b) => a.localeCompare(b))
 ---
 
@@ -47,7 +37,7 @@ const tags = [...new Set(projects.flatMap(project => project.data.tags))]
   </TopLayout>
   <BottomLayout>
     <div class="animate">
-      <Projects client:load tags={tags} data={projects} />
+      <Projects client:load tags={tags} data={posts} />
     </div>
   </BottomLayout>
 </PageLayout>

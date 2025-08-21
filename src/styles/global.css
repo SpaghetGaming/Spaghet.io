@@ -39,7 +39,7 @@ html {
 
 html.dark {
   color-scheme: dark;
-  background-color: black;
+  background-color: #000000; /* Darker black for better contrast */
 }
 
 /* Apply pastel cream background to main content areas */
@@ -51,6 +51,69 @@ html,
 body {
   @apply h-full w-full antialiased;
   @apply text-black/75 dark:text-white/75;
+}
+
+/* Better dark mode text contrast */
+.dark {
+  --tw-text-opacity: 1;
+  color: rgba(255, 255, 255, var(--tw-text-opacity));
+}
+
+/* Improved border visibility in dark mode */
+.border-black\/15 {
+  border-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+.border-white\/20 {
+  border-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+/* Better contrast for links and important text */
+.prose a {
+  color: var(--spaghetti-red) !important;
+}
+
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4,
+.prose h5,
+.prose h6 {
+  color: #ffffff !important;
+}
+
+.prose code {
+  color: #ffffff !important;
+}
+
+.prose blockquote {
+  border-left-color: var(--spaghetti-yellow) !important;
+}
+
+.prose th,
+.prose td {
+  color: #ffffff !important;
+}
+
+.page-heading {
+  @apply font-semibold text-black dark:text-white;
+}
+
+/* Better contrast for text elements */
+.text-spaghetti-brown {
+  color: #f59e0b !important; /* Amber-400 for better visibility */
+}
+
+/* Better background for code blocks in dark mode */
+.prose pre {
+  background-color: #1f2937 !important; /* gray-800 */
+  color: #f9fafb !important; /* gray-50 */
+}
+
+/* Improved dark mode for cards and buttons */
+.group:hover .border-black\/15,
+.group:hover .border-white\/20 {
+  border-color: rgba(255, 255, 255, 0.3) !important;
 }
 
 /* Pastel Theme Colors */

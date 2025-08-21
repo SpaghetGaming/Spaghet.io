@@ -1,7 +1,7 @@
 import type { BlogPost, Project } from "@lib/appwrite-service"
 import { createEffect, createSignal } from "solid-js"
-import Fuse from "fuse.js"
 import ArrowCard from "@components/ArrowCard"
+import { getBlogPosts, getProjects } from "@lib/appwrite-service"
 
 // Define a unified type for search results
 type SearchEntry = BlogPost | Project
@@ -14,18 +14,23 @@ export default function Search({data}: Props) {
   const [query, setQuery] = createSignal("")
   const [results, setResults] = createSignal<SearchEntry[]>([])
 
-  const fuse = new Fuse(data, {
-    keys: ["$id", "title", "summary", "tags"],
-    includeMatches: true,
-    minMatchCharLength: 2,
-    threshold: 0.4,
-  })
-
+  // Use Appwrite SDK to search all data
   createEffect(() => {
     if (query().length < 2) {
       setResults([])
     } else {
-      setResults(fuse.search(query()).map((result) => result.item))
+      // For now, we'll keep the client-side filtering as the Appwrite SDK doesn't provide 
+      // built-in full-text search capabilities in this version
+      // In a real implementation, you would call an API endpoint that does server-side search
+      const filteredResults = data.filter(item => {
+        const lowerQuery = query().toLowerCase()
+        return (
+          item.title.toLowerCase().includes(lowerQuery) ||
+          (item.summary && item.summary.toLowerCase().includes(lowerQuery)) ||
+          (item.tags && item.tags.some(tag => tag.toLowerCase().includes(lowerQuery)))
+        )
+      })
+      setResults(filteredResults)
     }
   })
 

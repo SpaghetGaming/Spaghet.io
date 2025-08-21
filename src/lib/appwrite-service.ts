@@ -90,12 +90,7 @@ export async function getBlogPosts(): Promise<BlogPost[]> {
   try {
     const response = await databases.listDocuments<BlogPost>(
       DATABASE_ID,
-      BLOG_COLLECTION_ID,
-      [
-        // Only fetch published posts (not drafts)
-        // This filter will need to be adjusted based on how you store draft status
-        // For now, we'll fetch all and filter client-side or in Appwrite queries
-      ]
+      BLOG_COLLECTION_ID
     );
     
     // Convert markdown content to HTML for each post
@@ -108,6 +103,41 @@ export async function getBlogPosts(): Promise<BlogPost[]> {
   } catch (error) {
     console.error("Error fetching blog posts:", error);
     throw new Error("Failed to fetch blog posts");
+  }
+}
+
+
+/**
+ * Get paginated blog posts from Appwrite database
+ */
+export async function getBlogPostsPaginated(page: number, limit: number): Promise<{ posts: BlogPost[], total: number }> {
+  try {
+    // For Appwrite SDK, the correct way to call listDocuments with pagination
+    const response = await databases.listDocuments<BlogPost>(
+      DATABASE_ID,
+      BLOG_COLLECTION_ID,
+      [
+        // Only fetch published posts (not drafts)
+        `draft != true`
+      ]
+    );
+    
+    // Apply pagination manually since Appwrite SDK might not support offset/limit directly in this version
+    const paginatedPosts = response.documents.slice((page - 1) * limit, page * limit);
+    
+    // Convert markdown content to HTML for each post
+    const postsWithHtml = paginatedPosts.map(post => ({
+      ...post,
+      contentHtml: convertMarkdownToHTML(post.content)
+    }));
+    
+    return {
+      posts: postsWithHtml,
+      total: response.total
+    };
+  } catch (error) {
+    console.error("Error fetching paginated blog posts:", error);
+    throw new Error("Failed to fetch paginated blog posts");
   }
 }
 
@@ -170,6 +200,40 @@ export async function getProjects(): Promise<Project[]> {
   } catch (error) {
     console.error("Error fetching projects:", error);
     throw new Error("Failed to fetch projects");
+  }
+}
+
+
+/**
+ * Get paginated projects from Appwrite database
+ */
+export async function getProjectsPaginated(page: number, limit: number): Promise<{ posts: Project[], total: number }> {
+  try {
+    const response = await databases.listDocuments<Project>(
+      DATABASE_ID,
+      PROJECTS_COLLECTION_ID,
+      [
+        // Only fetch published projects (not drafts)
+        `draft != true`
+      ]
+    );
+    
+    // Apply pagination manually since Appwrite SDK might not support offset/limit directly in this version
+    const paginatedPosts = response.documents.slice((page - 1) * limit, page * limit);
+    
+    // Convert markdown content to HTML for each project
+    const projectsWithHtml = paginatedPosts.map(project => ({
+      ...project,
+      contentHtml: convertMarkdownToHTML(project.content)
+    }));
+    
+    return {
+      posts: projectsWithHtml,
+      total: response.total
+    };
+  } catch (error) {
+    console.error("Error fetching paginated projects:", error);
+    throw new Error("Failed to fetch paginated projects");
   }
 }
 

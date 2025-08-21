@@ -5,7 +5,7 @@ import { cn } from "@lib/utils"
 
 type Props = {
   tags: string[]
-  data: CollectionEntry<"projects">[]
+  data: CollectionEntry<"projects">[] | any[]
 }
 
 export default function Projects({ data, tags }: Props) {

@@ -5,7 +5,7 @@ import { cn } from "@lib/utils"
 
 type Props = {
   tags: string[]
-  data: CollectionEntry<"blog">[] | any[] // Allow both content and appwrite data types
+  data: CollectionEntry<"blog">[] // Simplified to just Astro content for now
   templates?: string[] // Add template prop
 }
 
@@ -24,10 +24,8 @@ export default function Blog({ data, tags, templates = ["default"] }: Props) {
       )
       
       // Filter by template if a specific template is selected
-      // Handle both content collections and Appwrite data (which have different structures)
       const templateMatch = selectedTemplate() === "all" || 
-        (entry.data.template && entry.data.template === selectedTemplate()) ||
-        (entry.template && entry.template === selectedTemplate())
+        (entry.data.template && entry.data.template === selectedTemplate())
       
       return tagMatch && templateMatch
     }))

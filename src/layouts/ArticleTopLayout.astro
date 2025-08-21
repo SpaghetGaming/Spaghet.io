@@ -1,17 +1,18 @@
 ---
-import type { CollectionEntry } from "astro:content"
+import type { BlogPost, Project } from "@types/appwrite"
 import { formatDate, readingTime } from "@lib/utils"
 
 type Props = {
-  entry: CollectionEntry<"projects"> | CollectionEntry<"blog">
+  entry: BlogPost | Project
 }
 
 const { entry } = Astro.props
-const { collection, data, body } = entry
-const { title, summary, date } = data
+const { title, summary, date } = entry
+const demoUrl = "demoUrl" in entry ? entry.demoUrl : null
+const repoUrl = "repoUrl" in entry ? entry.repoUrl : null
+const collection = entry.$collectionId
+const body = entry.content
 
-const demoUrl = collection === "projects" ? data.demoUrl : null
-const repoUrl = collection === "projects" ? data.repoUrl : null
 ---
 
 <div>

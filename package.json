@@ -21,8 +21,8 @@
     "@astrojs/sitemap": "^3.5.0",
     "@astrojs/solid-js": "^5.1.0",
     "@astrojs/tailwind": "^6.0.2",
+    "@solidjs/testing-library": "^0.8.10",
     "@tailwindcss/typography": "^0.5.10",
-    "appwrite": "^18.2.0",
     "astro": "^5.13.0",
     "clsx": "^2.1.0",
     "fuse.js": "^7.0.0",
@@ -39,6 +39,7 @@
     "vitest": "^3.2.4"
   },
   "devDependencies": {
+    "appwrite": "^18.2.0",
     "dotenv-cli": "^10.0.0"
   }
 }
