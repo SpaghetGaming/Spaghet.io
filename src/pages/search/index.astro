@@ -1,62 +1,12 @@
 ---
-import { getBlogPosts, getProjects } from "@lib/appwrite-service"
 import PageLayout from "@layouts/PageLayout.astro"
 import TopLayout from "@layouts/TopLayout.astro"
 import BottomLayout from "@layouts/BottomLayout.astro"
 import Search from "@components/Search"
 import { SEARCH } from "@consts"
-import type { BlogPost, Project } from "@lib/appwrite-service"
 
-// Get all blog posts and projects from Appwrite
-const posts = (await getBlogPosts())
-  .filter(post => !post.draft)
-
-const projects = (await getProjects())
-  .filter(project => !project.draft)
-
-// Create unified data array for search - need to convert to proper format expected by Search component
-const searchData = [
-  ...posts.map(post => ({
-    id: post.$id,
-    slug: post.$id,
-    body: post.contentHtml || post.content,
-    collection: "blog",
-    data: {
-      title: post.title,
-      summary: post.summary,
-      date: new Date(post.date),
-      tags: post.tags,
-      draft: post.draft,
-      content: post.contentHtml || post.content
-    },
-    render: async () => ({
-      Content: () => {},
-      headings: [],
-      remarkPluginFrontmatter: {}
-    })
-  })),
-  ...projects.map(project => ({
-    id: project.$id,
-    slug: project.$id,
-    body: project.contentHtml || project.content,
-    collection: "projects",
-    data: {
-      title: project.title,
-      summary: project.summary,
-      date: new Date(project.date),
-      tags: project.tags,
-      draft: project.draft,
-      demoUrl: project.demoUrl,
-      repoUrl: project.repoUrl,
-      content: project.contentHtml || project.content
-    },
-    render: async () => ({
-      Content: () => {},
-      headings: [],
-      remarkPluginFrontmatter: {}
-    })
-  }))
-]
+// The search page now uses client-side search with Appwrite SDK directly
+// No need to pre-load all data as the Search component handles this via API calls
 ---
 
 <PageLayout title={SEARCH.TITLE} description={SEARCH.DESCRIPTION}>
@@ -67,7 +17,7 @@ const searchData = [
   </TopLayout>
   <BottomLayout>
     <div class="animate">
-      <Search client:load data={searchData}/>
+      <Search client:load/>
     </div>
   </BottomLayout>
 </PageLayout>

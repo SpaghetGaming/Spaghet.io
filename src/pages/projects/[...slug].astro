@@ -7,7 +7,7 @@ import ArticleBottomLayout from "@layouts/ArticleBottomLayout.astro"
 import { getProjectById } from "@lib/appwrite-service"
 
 // Get the requested project
-const slug = Astro.params.slug
+const slug = Astro.params.slug || ''
 const project = await getProjectById(slug)
   .then(projectData => {
     if (projectData) {

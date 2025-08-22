@@ -1,37 +1,41 @@
 import type { BlogPost, Project } from "@lib/appwrite-service"
 import { createEffect, createSignal } from "solid-js"
 import ArrowCard from "@components/ArrowCard"
-import { getBlogPosts, getProjects } from "@lib/appwrite-service"
-
-// Define a unified type for search results
-type SearchEntry = BlogPost | Project
+import { searchContent } from "@lib/appwrite-service"
 
 type Props = {
-  data: SearchEntry[]
+  // Remove the unused data prop
 }
 
-export default function Search({data}: Props) {
+export default function Search() {
   const [query, setQuery] = createSignal("")
-  const [results, setResults] = createSignal<SearchEntry[]>([])
+  const [results, setResults] = createSignal<{ posts: BlogPost[], projects: Project[] }>({ posts: [], projects: [] })
+  const [loading, setLoading] = createSignal(false)
+  const [error, setError] = createSignal<string | null>(null)
 
   // Use Appwrite SDK to search all data
   createEffect(() => {
     if (query().length < 2) {
-      setResults([])
-    } else {
-      // For now, we'll keep the client-side filtering as the Appwrite SDK doesn't provide 
-      // built-in full-text search capabilities in this version
-      // In a real implementation, you would call an API endpoint that does server-side search
-      const filteredResults = data.filter(item => {
-        const lowerQuery = query().toLowerCase()
-        return (
-          item.title.toLowerCase().includes(lowerQuery) ||
-          (item.summary && item.summary.toLowerCase().includes(lowerQuery)) ||
-          (item.tags && item.tags.some(tag => tag.toLowerCase().includes(lowerQuery)))
-        )
-      })
-      setResults(filteredResults)
+      setResults({ posts: [], projects: [] })
+      setError(null)
+      return
     }
+
+    setLoading(true)
+    searchContent(query())
+      .then(searchResults => {
+        setResults(searchResults)
+        setError(null)
+      })
+      .catch(error => {
+        console.error("Search error:", error)
+        // Handle error gracefully - maybe show an error message to user
+        setResults({ posts: [], projects: [] })
+        setError("Search failed. Please try again.")
+      })
+      .finally(() => {
+        setLoading(false)
+      })
   })
 
   const onInput = (e: Event) => {
@@ -47,18 +51,39 @@ export default function Search({data}: Props) {
           <use href={`/ui.svg#search`}/>
         </svg>
       </div>
-      {(query().length >= 2 && results().length >= 1) && (
+      {error() && <div class="mt-4 text-red-500">{error()}</div>}
+      {loading() && <div class="mt-4">Searching...</div>}
+      {(query().length >= 2 && (results().posts.length > 0 || results().projects.length > 0)) && (
         <div class="mt-12">
           <div class="text-sm uppercase mb-2">
-            Found {results().length} results for {`'${query()}'`}
+            Found {results().posts.length + results().projects.length} results for {`'${query()}'`}
           </div>
-          <ul class="flex flex-col gap-3">
-            {results().map(result => (
-              <li>
-                <ArrowCard entry={result} pill={true} />
-              </li>
-            ))}
-          </ul>
+          <div class="flex flex-col gap-6 mt-4">
+            {results().posts.length > 0 && (
+              <div class="border-t border-spaghetti-yellow/30 pt-4">
+                <div class="text-sm font-bold mb-2">Blog Posts</div>
+                <ul class="flex flex-col gap-3">
+                  {results().posts.map(result => (
+                    <li>
+                      <ArrowCard entry={result} pill={true} />
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            {results().projects.length > 0 && (
+              <div class="border-t border-spaghetti-yellow/30 pt-4">
+                <div class="text-sm font-bold mb-2">Projects</div>
+                <ul class="flex flex-col gap-3">
+                  {results().projects.map((result, index) => (
+                    <li>
+                      <ArrowCard entry={result} pill={true} />
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
         </div>
       )}
     </div>

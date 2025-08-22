@@ -1,4 +1,4 @@
-import { Client, Storage, Databases } from "appwrite";
+import { Client, Databases } from "appwrite";
 
 const client = new Client();
 
@@ -29,5 +29,4 @@ if (typeof window === 'undefined') {
     .setProject(projectId); // Your Project ID
 }
 
-export const storage = new Storage(client);
 export const databases = new Databases(client);

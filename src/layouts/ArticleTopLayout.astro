@@ -1,16 +1,16 @@
 ---
-import type { BlogPost, Project } from "@types/appwrite"
+import type { BlogPost, Project } from "@lib/appwrite-service"
 import { formatDate, readingTime } from "@lib/utils"
 
 type Props = {
-  entry: BlogPost | Project
+  entry: BlogPost | Project | any
 }
 
 const { entry } = Astro.props
 const { title, summary, date } = entry
 const demoUrl = "demoUrl" in entry ? entry.demoUrl : null
 const repoUrl = "repoUrl" in entry ? entry.repoUrl : null
-const collection = entry.$collectionId
+const collection = entry.$collectionId === process.env.VITE_APPWRITE_BLOG_COLLECTION_ID ? 'blog' : 'projects'
 const body = entry.content
 
 ---
@@ -22,7 +22,7 @@ const body = entry.content
       <polyline points="12 19 5 12 12 5" class="translate-x-1 group-hover:translate-x-0 transition-all duration-300 ease-in-out" />
     </svg>
     <div class="w-full group-hover:text-black group-hover:dark:text-white transition-colors duration-300 ease-in-out">
-      Back to {collection}
+      Back to {`${collection.charAt(0).toUpperCase()}${collection.slice(1)}`}
     </div>
   </a>
   <div class="flex flex-wrap text-sm uppercase mt-12 gap-3 opacity-75">

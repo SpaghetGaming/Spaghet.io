@@ -27,6 +27,7 @@
     "clsx": "^2.1.0",
     "fuse.js": "^7.0.0",
     "notenv": "^2.0.3",
+    "npm": "^11.5.2",
     "rehype-stringify": "^10.0.1",
     "remark": "^15.0.1",
     "remark-rehype": "^11.1.2",

@@ -4,14 +4,14 @@ import { formatDate, readingTime } from "@lib/utils"
 import { getBlogPosts, getProjects } from "@lib/appwrite-service"
 
 type Props = {
-  entry: BlogPost | Project
+  entry: BlogPost | Project | any
 }
 
 const { entry } = Astro.props
-const collection = entry.$collectionId
+const collection = entry.$collectionId === process.env.VITE_APPWRITE_BLOG_COLLECTION_ID ? 'blog' : 'projects'
 
 // Get the content from the entry
-const content = entry.content
+const content = entry.contentHtml
 
 // Fetch all documents for navigation
 let prevEntry = null
@@ -51,9 +51,7 @@ if (collection === "blog") {
 ---
 
 <div>
-  <article>
-    {content}
-  </article>
+  <article set:html={content} />
   <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
     {prevEntry && (
       <a href={`/${collection}/${prevEntry.$id}`} class="group p-4 gap-3 flex items-center border rounded-lg hover:bg-black/5 hover:dark:bg-white/10 border-black/15 dark:border-white/20 blend">
