@@ -338,7 +338,11 @@ export async function searchContent(query: string): Promise<{ posts: BlogPost[],
     };
   } catch (error) {
     console.error("Error performing search:", error);
-    throw new Error("Failed to perform search");
+    // More specific error handling for Appwrite errors
+    if (error instanceof Error) {
+      throw new Error(`Search failed: ${error.message}`);
+    }
+    throw new Error("Search failed due to an unknown error");
   }
 }
 

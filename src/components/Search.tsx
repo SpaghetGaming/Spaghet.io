@@ -27,8 +27,8 @@ export default function Search() {
         setResults(searchResults)
         setError(null)
       })
-      .catch(error => {
-        console.error("Search error:", error)
+      .catch(err => {
+        console.error("Search error:", err)
         // Handle error gracefully - maybe show an error message to user
         setResults({ posts: [], projects: [] })
         setError("Search failed. Please try again.")
@@ -43,14 +43,28 @@ export default function Search() {
     setQuery(target.value)
   }
 
+  const handleSubmit = (e: Event) => {
+    e.preventDefault()
+    // The search will automatically trigger due to createEffect
+  }
+
   return (
     <div class="flex flex-col">
-      <div class="relative">
-        <input name="search" type="text" value={query()} onInput={onInput} autocomplete="off" spellcheck={false} placeholder="What are you looking for?" class="w-full px-2.5 py-1.5 pl-10 rounded outline-none text-spaghetti-brown bg-spaghetti-yellow/20 dark:bg-spaghetti-yellow/20 border border-spaghetti-yellow/50 dark:border-spaghetti-yellow/50 focus:border-spaghetti-red focus:dark:border-spaghetti-red"/>
+      <form onSubmit={handleSubmit} class="relative">
+        <input 
+          name="search" 
+          type="text" 
+          value={query()} 
+          onInput={onInput} 
+          autocomplete="off" 
+          spellcheck={false} 
+          placeholder="What are you looking for?" 
+          class="w-full px-2.5 py-1.5 pl-10 rounded outline-none text-spaghetti-brown bg-spaghetti-yellow/20 dark:bg-spaghetti-yellow/20 border border-spaghetti-yellow/50 dark:border-spaghetti-yellow/50 focus:border-spaghetti-red focus:dark:border-spaghetti-red"
+        />
         <svg class="absolute size-6 left-1.5 top-1/2 -translate-y-1/2 stroke-current">
           <use href={`/ui.svg#search`}/>
         </svg>
-      </div>
+      </form>
       {error() && <div class="mt-4 text-red-500">{error()}</div>}
       {loading() && <div class="mt-4">Searching...</div>}
       {(query().length >= 2 && (results().posts.length > 0 || results().projects.length > 0)) && (
