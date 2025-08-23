@@ -1,19 +1,22 @@
 import type { BlogPost, Project } from "@lib/appwrite-service"
-import { createEffect, createSignal } from "solid-js"
+import { createEffect, createSignal, onCleanup } from "solid-js"
 import ArrowCard from "@components/ArrowCard"
 import { searchContent } from "@lib/appwrite-service"
 
 type Props = {
-  // Remove the unused data prop
+  query?: string
 }
 
-export default function Search() {
-  const [query, setQuery] = createSignal("")
+export default function Search(props: Props) {
+  const [query, setQuery] = createSignal(props.query || "")
   const [results, setResults] = createSignal<{ posts: BlogPost[], projects: Project[] }>({ posts: [], projects: [] })
   const [loading, setLoading] = createSignal(false)
   const [error, setError] = createSignal<string | null>(null)
+  
+  // Debounce timeout reference
+  let debounceTimeout: NodeJS.Timeout | null = null
 
-  // Use Appwrite SDK to search all data
+  // Use Appwrite SDK to search all data with debouncing
   createEffect(() => {
     if (query().length < 2) {
       setResults({ posts: [], projects: [] })
@@ -21,21 +24,29 @@ export default function Search() {
       return
     }
 
-    setLoading(true)
-    searchContent(query())
-      .then(searchResults => {
-        setResults(searchResults)
-        setError(null)
-      })
-      .catch(err => {
-        console.error("Search error:", err)
-        // Handle error gracefully - maybe show an error message to user
-        setResults({ posts: [], projects: [] })
-        setError("Search failed. Please try again.")
-      })
-      .finally(() => {
-        setLoading(false)
-      })
+    // Clear previous timeout
+    if (debounceTimeout) {
+      clearTimeout(debounceTimeout)
+    }
+
+    // Set new debounce timeout
+    debounceTimeout = setTimeout(() => {
+      setLoading(true)
+      searchContent(query())
+        .then(searchResults => {
+          setResults(searchResults)
+          setError(null)
+        })
+        .catch(err => {
+          console.error("Search error:", err)
+          // Handle error gracefully - maybe show an error message to user
+          setResults({ posts: [], projects: [] })
+          setError("Search failed. Please try again.")
+        })
+        .finally(() => {
+          setLoading(false)
+        })
+    }, 300) // 300ms debounce delay
   })
 
   const onInput = (e: Event) => {
@@ -45,12 +56,26 @@ export default function Search() {
 
   const handleSubmit = (e: Event) => {
     e.preventDefault()
-    // The search will automatically trigger due to createEffect
+    // Prevent page refresh by using client-side navigation
+    if (query().length >= 2) {
+      // Search will automatically trigger due to createEffect
+      // Update URL without full page reload
+      const newUrl = `${window.location.pathname}?search=${encodeURIComponent(query())}`
+      window.history.pushState({}, "", newUrl)
+      // Dispatch custom event to update search results (removed for now - not needed with createEffect)
+    }
   }
+
+  // Cleanup debounce timeout on component unmount
+  onCleanup(() => {
+    if (debounceTimeout) {
+      clearTimeout(debounceTimeout)
+    }
+  })
 
   return (
     <div class="flex flex-col">
-      <form onSubmit={handleSubmit} class="relative">
+      <form onSubmit={handleSubmit} class="relative" classList={{ "animate-pulse": loading() }}>
         <input 
           name="search" 
           type="text" 
@@ -66,7 +91,7 @@ export default function Search() {
         </svg>
       </form>
       {error() && <div class="mt-4 text-red-500">{error()}</div>}
-      {loading() && <div class="mt-4">Searching...</div>}
+      {loading() && <div class="mt-4">Searching...<span class="ml-2 animate-spin">⏳</span></div>}
       {(query().length >= 2 && (results().posts.length > 0 || results().projects.length > 0)) && (
         <div class="mt-12">
           <div class="text-sm uppercase mb-2">
@@ -79,7 +104,7 @@ export default function Search() {
                 <ul class="flex flex-col gap-3">
                   {results().posts.map(result => (
                     <li>
-                      <ArrowCard entry={result} pill={true} />
+                      <ArrowCard entry={result} pill={true} collection={'blog'} />
                     </li>
                   ))}
                 </ul>
@@ -91,7 +116,7 @@ export default function Search() {
                 <ul class="flex flex-col gap-3">
                   {results().projects.map((result, index) => (
                     <li>
-                      <ArrowCard entry={result} pill={true} />
+                      <ArrowCard entry={result} pill={true} collection={'projects'} />
                     </li>
                   ))}
                 </ul>

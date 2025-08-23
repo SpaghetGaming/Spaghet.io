@@ -16,9 +16,9 @@ if (typeof window === 'undefined') {
     .setEndpoint(endpoint) // Your Appwrite endpoint
     .setProject(projectId); // Your Project ID
 } else {
-  // Client-side: use import.meta.env
-  const endpoint = import.meta.env.VITE_APPWRITE_ENDPOINT;
-  const projectId = import.meta.env.VITE_APPWRITE_PROJECT_ID;
+  // Client-side: use import.meta.env (need to prefix with PUBLIC_ for Astro to make them available)
+  const endpoint = import.meta.env.PUBLIC_APPWRITE_ENDPOINT;
+  const projectId = import.meta.env.PUBLIC_APPWRITE_PROJECT_ID;
   
   if (!endpoint || !projectId) {
     throw new Error('Appwrite configuration missing in client environment');

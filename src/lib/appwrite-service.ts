@@ -79,14 +79,24 @@ export type LegalDocument = Models.Document & {
 export type SearchEntry = BlogPost | Project;
 
 // Collection IDs - these should be configured based on your Appwrite setup
-const BLOG_COLLECTION_ID = process.env.VITE_APPWRITE_BLOG_COLLECTION_ID || "blog";
-const PROJECTS_COLLECTION_ID = process.env.VITE_APPWRITE_PROJECTS_COLLECTION_ID || "project";
-const WORK_COLLECTION_ID = process.env.VITE_APPWRITE_WORK_COLLECTION_ID || "work";
-const LEGAL_COLLECTION_ID = process.env.VITE_APPWRITE_LEGAL_COLLECTION_ID || "legal";
 
-// Database ID - should be configured based on your Appwrite setup
-const DATABASE_ID = process.env.VITE_APPWRITE_DATABASE_ID || "main";
+let blogCollection = '', projectsCollection = '', workCollection = '', legalCollection = '', databaseID = '';
 
+// Check if we're in a server environment (SSR)
+if (typeof window === 'undefined') {
+  // Server-side: use environment variables directly
+  blogCollection = process?.env?.VITE_APPWRITE_BLOG_COLLECTION_ID || 'blog';
+  projectsCollection = process?.env?.VITE_APPWRITE_PROJECTS_COLLECTION_ID || "projects";
+  workCollection = process?.env?.VITE_APPWRITE_WORK_COLLECTION_ID || "work";
+  legalCollection = process?.env?.VITE_APPWRITE_LEGAL_COLLECTION_ID || "legal";
+  databaseID = process.env.VITE_APPWRITE_DATABASE_ID || "main";
+} else {
+  blogCollection = import.meta.env.PUBLIC_APPWRITE_BLOG_COLLECTION_ID || 'blog';
+  projectsCollection = import.meta.env.PUBLIC_APPWRITE_PROJECTS_COLLECTION_ID || "projects";
+  workCollection = import.meta.env.PUBLIC_APPWRITE_WORK_COLLECTION_ID || "work";
+  legalCollection = import.meta.env.PUBLIC_APPWRITE_LEGAL_COLLECTION_ID || "legal";
+  databaseID = import.meta.env.PUBLIC_APPWRITE_DATABASE_ID || "main";
+}
 
 /**
  * Get blog posts from Appwrite database
@@ -94,8 +104,8 @@ const DATABASE_ID = process.env.VITE_APPWRITE_DATABASE_ID || "main";
 export async function getBlogPosts(): Promise<BlogPost[]> {
   try {
     const response = await databases.listDocuments<BlogPost>(
-      DATABASE_ID,
-      BLOG_COLLECTION_ID
+      databaseID,
+      blogCollection
     );
     
     // Convert markdown content to HTML for each post
@@ -119,11 +129,12 @@ export async function getBlogPostsPaginated(page: number, limit: number): Promis
   try {
     // For Appwrite SDK, the correct way to call listDocuments with pagination
     const response = await databases.listDocuments<BlogPost>(
-      DATABASE_ID,
-      BLOG_COLLECTION_ID,
+      databaseID,
+      blogCollection,
       [
         // Only fetch published posts (not drafts)
-        Query.equal("draft", false)
+        Query.equal("draft", false),
+        Query.orderDesc('date')
       ]
     );
     
@@ -153,8 +164,8 @@ export async function getBlogPostsPaginated(page: number, limit: number): Promis
 export async function getBlogPostById(id: string): Promise<BlogPost> {
   try {
     const response = await databases.getDocument<BlogPost>(
-      DATABASE_ID,
-      BLOG_COLLECTION_ID,
+      databaseID,
+      blogCollection,
       id
     );
     
@@ -175,10 +186,12 @@ export async function getBlogPostById(id: string): Promise<BlogPost> {
 export async function getProjects(): Promise<Project[]> {
   try {
     const response = await databases.listDocuments<Project>(
-      DATABASE_ID,
-      PROJECTS_COLLECTION_ID,
+      databaseID,
+      projectsCollection,
       [
         // Only fetch published projects (not drafts)
+        Query.equal("draft", false),
+        Query.orderDesc('date')
       ]
     );
     
@@ -202,11 +215,12 @@ export async function getProjects(): Promise<Project[]> {
 export async function getProjectsPaginated(page: number, limit: number): Promise<{ posts: Project[], total: number }> {
   try {
     const response = await databases.listDocuments<Project>(
-      DATABASE_ID,
-      PROJECTS_COLLECTION_ID,
+      databaseID,
+      projectsCollection,
       [
         // Only fetch published projects (not drafts)
-        Query.equal("draft", false)
+        Query.equal("draft", false),
+        Query.orderDesc('date')
       ]
     );
     
@@ -236,8 +250,8 @@ export async function getProjectsPaginated(page: number, limit: number): Promise
 export async function getProjectById(id: string): Promise<Project> {
   try {
     const response = await databases.getDocument<Project>(
-      DATABASE_ID,
-      PROJECTS_COLLECTION_ID,
+      databaseID,
+      projectsCollection,
       id
     );
     
@@ -259,8 +273,8 @@ export async function getProjectById(id: string): Promise<Project> {
 export async function getWorkExperiences(): Promise<WorkExperience[]> {
   try {
     const response = await databases.listDocuments<WorkExperience>(
-      DATABASE_ID,
-      WORK_COLLECTION_ID
+      databaseID,
+      workCollection
     );
 
     // Convert markdown content to HTML for each project
@@ -280,8 +294,8 @@ export async function getWorkExperiences(): Promise<WorkExperience[]> {
 export async function getLegalDocuments(): Promise<LegalDocument[]> {
   try {
     const response = await databases.listDocuments<LegalDocument>(
-      DATABASE_ID,
-      LEGAL_COLLECTION_ID
+      databaseID,
+      workCollection
     );
     
     return response.documents;
@@ -298,25 +312,35 @@ export async function searchContent(query: string): Promise<{ posts: BlogPost[],
   try {
     // Search in blog collection for the query term
     const blogResponse = await databases.listDocuments<BlogPost>(
-      DATABASE_ID,
-      BLOG_COLLECTION_ID,
+      databaseID,
+      blogCollection,
       [
-        Query.equal("draft", false),
-        Query.search("title", query),
-        Query.search("summary", query),
-        Query.search("content", query)
+        Query.and([
+          Query.equal("draft", false),
+          Query.or([
+            Query.search("title", query),
+            Query.search("summary", query),
+            Query.search("content", query)
+          ])
+        ]),
+        Query.orderDesc('date')
       ]
     );
 
     // Search in projects collection for the query term
     const projectResponse = await databases.listDocuments<Project>(
-      DATABASE_ID,
-      PROJECTS_COLLECTION_ID,
+      databaseID,
+      projectsCollection,
       [
-        Query.equal("draft", false),
-        Query.search("title", query),
-        Query.search("summary", query),
-        Query.search("content", query)
+        Query.and([
+          Query.equal("draft", false),
+          Query.or([
+            Query.search("title", query),
+            Query.search("summary", query),
+            Query.search("content", query)
+          ])
+        ]),
+        Query.orderDesc('date')
       ]
     );
 
@@ -345,6 +369,9 @@ export async function searchContent(query: string): Promise<{ posts: BlogPost[],
     throw new Error("Search failed due to an unknown error");
   }
 }
+
+// Remove the duplicate function - keep only the original searchContent function
+// The original searchContent function is already correctly implemented and should be used
 
 
 /**

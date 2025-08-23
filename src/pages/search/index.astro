@@ -7,6 +7,13 @@ import { SEARCH } from "@consts"
 
 // The search page now uses client-side search with Appwrite SDK directly
 // No need to pre-load all data as the Search component handles this via API calls
+
+// Handle URL search parameters - add proper client-side handling for search query
+const url = new URL(typeof window !== 'undefined' ? window.location.href : 'http://localhost')
+const searchParam = url.searchParams.get('search') || ''
+
+// Pass initial search query to component if present in URL
+const initialQuery = searchParam
 ---
 
 <PageLayout title={SEARCH.TITLE} description={SEARCH.DESCRIPTION}>
@@ -16,8 +23,8 @@ import { SEARCH } from "@consts"
     </div>
   </TopLayout>
   <BottomLayout>
-    <div class="animate">
-      <Search client:load/>
+    <div class="animate" id="search-container">
+      <Search client:load query={initialQuery}/>
     </div>
   </BottomLayout>
 </PageLayout>

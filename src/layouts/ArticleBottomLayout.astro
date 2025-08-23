@@ -51,17 +51,17 @@ if (collection === "blog") {
 ---
 
 <div>
-  <article set:html={content} />
+  <article class="text-spaghetti-brown/80 dark:text-spaghetti-cream" set:html={content} />
   <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
     {prevEntry && (
-      <a href={`/${collection}/${prevEntry.$id}`} class="group p-4 gap-3 flex items-center border rounded-lg hover:bg-black/5 hover:dark:bg-white/10 border-black/15 dark:border-white/20 blend">
-        <div class="order-2 w-full h-full group-hover:text-black group-hover:dark:text-white blend">
+      <a href={`/${collection}/${prevEntry.$id}`} class="group p-4 gap-3 flex items-center border rounded-lg hover:bg-black/5 hover:dark:bg-spaghetti-cream/10 border-black/15 dark:border-spaghetti-cream/20 blend">
+        <div class="order-2 w-full h-full group-hover:text-spaghetti-brown/80 group-hover:dark:text-spaghetti-cream blend">
           <div class="flex flex-wrap gap-2">
             <div class="text-sm uppercase">
               Prev
             </div>
           </div>
-          <div class="font-semibold mt-3 text-black dark:text-white">
+          <div class="font-semibold mt-3 text-spaghetti-brown/80 dark:text-spaghetti-cream">
             {prevEntry.title}
           </div>
         </div>
@@ -72,12 +72,12 @@ if (collection === "blog") {
       </a>
     )}
     {nextEntry && (
-      <a href={`/${collection}/${nextEntry.$id}`} class="group p-4 gap-3 flex items-center border rounded-lg hover:bg-black/5 hover:dark:bg-white/10 border-black/15 dark:border-white/20 transition-colors duration-300 ease-in-out">
-        <div class="w-full h-full text-right group-hover:text-black group-hover:dark:text-white blend">
+      <a href={`/${collection}/${nextEntry.$id}`} class="group p-4 gap-3 flex items-center border rounded-lg hover:bg-black/5 hover:dark:bg-spaghetti-cream/10 border-black/15 dark:border-spaghetti-cream/20 transition-colors duration-300 ease-in-out">
+        <div class="w-full h-full text-right group-hover:text-spaghetti-brown/80 group-hover:dark:text-spaghetti-cream blend">
           <div class="text-sm uppercase">
             Next
           </div>
-          <div class="font-semibold mt-3 text-black dark:text-white">
+          <div class="font-semibold mt-3 text-spaghetti-brown/80 dark:text-spaghetti-cream">
             {nextEntry.title}
           </div>
         </div>
