@@ -44,13 +44,13 @@ function formatWorkDate(input: Date | string) {
             <div class="text-sm uppercase mb-4">
               {formatWorkDate(entry.dateStart)} - {formatWorkDate(entry.dateEnd)}
             </div>
-            <div class="text-black dark:text-white font-semibold">
+            <div class="text-spaghetti-brown/100 dark:text-spaghetti-yellow font-semibold">
               {entry.company}
             </div>
-            <div class="text-sm font-semibold">
+            <div class="text-sm font-semibold text-spaghetti-brown/100 dark:text-spaghetti-yellow">
               {entry.role}
             </div>
-            <article class="prose dark:prose-invert" set:html={entry.contentHtml}></article>
+            <article class="prose dark:prose-invert text-spaghetti-brown/100 dark:text-spaghetti-cream" set:html={entry.contentHtml}></article>
           </li>
         ))
       }
