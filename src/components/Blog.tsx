@@ -5,7 +5,7 @@ import { cn } from "@lib/utils"
 
 type Props = {
   tags: string[]
-  data: CollectionEntry<"blog">[]
+  data: CollectionEntry<"blog">[] // Simplified to just Astro content for now
 }
 
 export default function Blog({ data, tags }: Props) {
@@ -13,13 +13,16 @@ export default function Blog({ data, tags }: Props) {
   const [posts, setPosts] = createSignal<CollectionEntry<"blog">[]>([])
 
   createEffect(() => {
-    setPosts(data.filter((entry) => 
-      Array.from(filter()).every((value) => 
-        entry.data.tags.some((tag:string) => 
+    setPosts(data.filter((entry) => {
+      // Filter by tags
+      const tagMatch = Array.from(filter()).every((value) => 
+        entry.tags.some((tag:string) => 
           tag.toLowerCase() === String(value).toLowerCase()
         )
       )
-    ))
+      
+      return tagMatch
+    }))
   })
 
   function toggleTag(tag: string) {
@@ -35,22 +38,26 @@ export default function Blog({ data, tags }: Props) {
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
       <div class="col-span-3 sm:col-span-1">
         <div class="sticky top-24">
-          <div class="text-sm font-semibold uppercase mb-2 text-spaghetti-brown">Filter</div>
-          <ul class="flex flex-wrap sm:flex-col gap-1.5">
-            <For each={tags}>
-              {(tag) => (
-                <li>
-                  <button onClick={() => toggleTag(tag)} class={cn("w-full px-2 py-1 rounded", "whitespace-nowrap overflow-hidden overflow-ellipsis", "flex gap-2 items-center", "bg-spaghetti-yellow/20 dark:bg-spaghetti-yellow/20", "hover:bg-spaghetti-yellow/30 hover:dark:bg-spaghetti-yellow/30", "transition-colors duration-300 ease-in-out", filter().has(tag) && "text-spaghetti-brown dark:text-spaghetti-brown")}>
-                    <svg class={cn("size-5 fill-spaghetti-brown/50 dark:fill-spaghetti-brown/50", "transition-colors duration-300 ease-in-out", filter().has(tag) && "fill-spaghetti-brown dark:fill-spaghetti-brown")}>
-                      <use href={`/ui.svg#square`} class={cn(!filter().has(tag) ? "block" : "hidden")} />
-                      <use href={`/ui.svg#square-check`} class={cn(filter().has(tag) ? "block" : "hidden")} />
-                    </svg>
-                    {tag}
-                  </button>
-                </li>
-              )}
-            </For>
-          </ul>
+          <div class="text-sm font-semibold uppercase mb-2 text-spaghetti-brown/80 dark:text-spaghetti-cream">Filter</div>
+          {/* Tag Filter */}
+          <div class="mb-2">
+            <div class="text-xs uppercase mb-1 text-spaghetti-brown/70">Tags</div>
+            <ul class="flex flex-wrap sm:flex-col gap-1.5">
+              <For each={tags}>
+                {(tag) => (
+                  <li>
+                    <button onClick={() => toggleTag(tag)} class={cn("w-full px-2 py-1 rounded", "whitespace-nowrap overflow-hidden overflow-ellipsis", "flex gap-2 items-center", "bg-spaghetti-yellow/20 dark:bg-spaghetti-yellow/20", "hover:bg-spaghetti-yellow/30 hover:dark:bg-spaghetti-yellow/30", "transition-colors duration-300 ease-in-out", filter().has(tag) && "text-spaghetti-brown/80 dark:text-spaghetti-brown")}>
+                      <svg class={cn("size-5 fill-spaghetti-brown/50 dark:fill-spaghetti-brown/50", "transition-colors duration-300 ease-in-out", filter().has(tag) && "fill-spaghetti-brown dark:fill-spaghetti-brown")}>
+                        <use href={`/ui.svg#square`} class={cn(!filter().has(tag) ? "block" : "hidden")} />
+                        <use href={`/ui.svg#square-check`} class={cn(filter().has(tag) ? "block" : "hidden")} />
+                      </svg>
+                      {tag}
+                    </button>
+                  </li>
+                )}
+              </For>
+            </ul>
+          </div>
         </div>
       </div>
       <div class="col-span-3 sm:col-span-2">
@@ -61,7 +68,7 @@ export default function Blog({ data, tags }: Props) {
           <ul class="flex flex-col gap-3">
             {posts().map((post) => (
               <li>
-                <ArrowCard entry={post} />
+                <ArrowCard entry={post} collection={'blog'} />
               </li>
             ))}
           </ul>

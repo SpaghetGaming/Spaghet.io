@@ -5,7 +5,7 @@ import { cn } from "@lib/utils"
 
 type Props = {
   tags: string[]
-  data: CollectionEntry<"projects">[]
+  data: CollectionEntry<"projects">[] | any[]
 }
 
 export default function Projects({ data, tags }: Props) {
@@ -15,7 +15,7 @@ export default function Projects({ data, tags }: Props) {
   createEffect(() => {
     setProjects(data.filter((entry) => 
       Array.from(filter()).every((value) => 
-        entry.data.tags.some((tag:string) => 
+        entry.tags.some((tag:string) => 
           tag.toLowerCase() === String(value).toLowerCase()
         )
       )
@@ -61,7 +61,7 @@ export default function Projects({ data, tags }: Props) {
           <ul class="flex flex-col gap-3">
             {projects().map((project) => (
               <li>
-                <ArrowCard entry={project} />
+                <ArrowCard entry={project} collection={'projects'} />
               </li>
             ))}
           </ul>

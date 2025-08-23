@@ -1,18 +1,19 @@
 ---
-import { type CollectionEntry, getCollection } from "astro:content"
 import PageLayout from "@layouts/PageLayout.astro"
 import TopLayout from "@layouts/TopLayout.astro"
 import BottomLayout from "@layouts/BottomLayout.astro"
 import Search from "@components/Search"
 import { SEARCH } from "@consts"
 
-const posts = (await getCollection("blog"))
-  .filter(post => !post.data.draft)
+// The search page now uses client-side search with Appwrite SDK directly
+// No need to pre-load all data as the Search component handles this via API calls
 
-const projects = (await getCollection("projects"))
-  .filter(post => !post.data.draft)
+// Handle URL search parameters - add proper client-side handling for search query
+const url = new URL(typeof window !== 'undefined' ? window.location.href : 'http://localhost')
+const searchParam = url.searchParams.get('search') || ''
 
-const data = [...posts, ...projects] as CollectionEntry<"blog">[]
+// Pass initial search query to component if present in URL
+const initialQuery = searchParam
 ---
 
 <PageLayout title={SEARCH.TITLE} description={SEARCH.DESCRIPTION}>
@@ -22,8 +23,8 @@ const data = [...posts, ...projects] as CollectionEntry<"blog">[]
     </div>
   </TopLayout>
   <BottomLayout>
-    <div class="animate">
-      <Search client:load data={data}/>
+    <div class="animate" id="search-container">
+      <Search client:load query={initialQuery}/>
     </div>
   </BottomLayout>
 </PageLayout>

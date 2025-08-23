@@ -1,16 +1,32 @@
 ---
-import { getCollection } from "astro:content"
 import PageLayout from "@layouts/PageLayout.astro"
 import TopLayout from "@layouts/TopLayout.astro"
 import BottomLayout from "@layouts/BottomLayout.astro"
 import Projects from "@components/Projects"
 import { PROJECTS } from "@consts"
+import { getProjectsPaginated } from "@lib/appwrite-service"
 
-const projects = (await getCollection("projects"))
-  .filter(project => !project.data.draft)
-  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
 
-const tags = [...new Set(projects.flatMap(project => project.data.tags))]
+// Get page and limit from URL parameters
+const url = new URL(typeof window !== 'undefined' ? window.location.href : 'https://home.spaghet.io')
+const pageParam = url.searchParams.get('page') || '1'
+const limitParam = url.searchParams.get('limit') || '10'
+const page = parseInt(pageParam)
+const limit = parseInt(limitParam)
+
+// Fetch paginated projects
+const { posts, total } = await getProjectsPaginated(page, limit)
+  .then(result => {
+    console.log(result)
+    return result;
+  })
+  .catch(error => {
+    console.error("Error fetching projects:", error);
+    return { posts: [], total: 0 };
+  })
+
+// Get all tags for filtering
+const tags = [...new Set(posts.flatMap(project => project.tags))]
   .sort((a, b) => a.localeCompare(b))
 ---
 
@@ -22,7 +38,7 @@ const tags = [...new Set(projects.flatMap(project => project.data.tags))]
   </TopLayout>
   <BottomLayout>
     <div class="animate">
-      <Projects client:load tags={tags} data={projects} />
+      <Projects client:load tags={tags} data={posts} />
     </div>
   </BottomLayout>
 </PageLayout>

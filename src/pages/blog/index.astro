@@ -1,16 +1,30 @@
 ---
-import { getCollection } from "astro:content"
 import PageLayout from "@layouts/PageLayout.astro"
 import TopLayout from "@layouts/TopLayout.astro"
 import BottomLayout from "@layouts/BottomLayout.astro"
 import Blog from "@components/Blog"
 import { BLOG } from "@consts"
+import { getBlogPosts, getBlogPostsPaginated } from "@lib/appwrite-service"
 
-const posts = (await getCollection("blog"))
-  .filter(post => !post.data.draft)
-  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+// Get page and limit from URL parameters
+const url = new URL(typeof window !== 'undefined' ? window.location.href : 'http://localhost')
+const pageParam = url.searchParams.get('page') || '1'
+const limitParam = url.searchParams.get('limit') || '10'
+const page = parseInt(pageParam)
+const limit = parseInt(limitParam)
 
-const tags = [...new Set(posts.flatMap(post => post.data.tags))]
+// Fetch paginated blog posts
+const { posts, total } = await getBlogPostsPaginated(page, limit)
+  .then(result => {
+    return result;
+  })
+  .catch(error => {
+    console.error("Error fetching blog posts:", error);
+    return { posts: [], total: 0 };
+  })
+
+// Get all tags for filtering
+const tags = [...new Set(posts.flatMap(post => post.tags))]
   .sort((a, b) => a.localeCompare(b))
 ---
 
@@ -26,5 +40,3 @@ const tags = [...new Set(posts.flatMap(post => post.data.tags))]
     </div>
   </BottomLayout>
 </PageLayout>
-
-

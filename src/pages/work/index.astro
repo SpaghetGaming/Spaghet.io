@@ -1,23 +1,25 @@
 ---
-import { getCollection } from "astro:content"
 import PageLayout from "@layouts/PageLayout.astro"
 import TopLayout from "@layouts/TopLayout.astro"
 import BottomLayout from "@layouts/BottomLayout.astro"
 import { WORK } from "@consts"
+import { getWorkExperiences, type WorkExperience } from "@lib/appwrite-service"
 
-const collection = await getCollection("work")
+type Props = {
+  entry: WorkExperience
+}
 
-collection.sort((a, b) => new Date(b.data.dateStart).getTime() - new Date(a.data.dateStart).getTime())
-
-const work = await Promise.all(
-  collection.map(async (item) => {
-    const { Content } = await item.render()
-    return { ...item, Content }
+const work = await getWorkExperiences()
+  .then(workList => {
+    return workList;
   })
-)
+  .catch(error => {
+    console.error("Error fetching work experiences:", error);
+    return [];
+  })
 
 function formatWorkDate(input: Date | string) {
-  if (typeof input === "string") return input
+  if (typeof input === "string") input = new Date(input)
 
   const month = input.toLocaleDateString("en-US", {
     month: "short",
@@ -37,23 +39,22 @@ function formatWorkDate(input: Date | string) {
   <BottomLayout>
     <ul>
       { 
-        work.map((entry) => (
+        work.sort((a, b) => a.dateEnd > b.dateEnd ? -1 : b.dateEnd > a.dateEnd ? 1 : 0).map((entry) => (
           <li class="animate border-b border-black/10 dark:border-white/25 mt-4 py-8 first-of-type:mt-0 first-of-type:pt-0 last-of-type:border-none">
             <div class="text-sm uppercase mb-4">
-              {formatWorkDate(entry.data.dateStart)} - {formatWorkDate(entry.data.dateEnd)}
+              {formatWorkDate(entry.dateStart)} - {formatWorkDate(entry.dateEnd)}
             </div>
-            <div class="text-black dark:text-white font-semibold">
-              {entry.data.company}
+            <div class="text-spaghetti-brown/100 dark:text-spaghetti-yellow font-semibold">
+              {entry.company}
             </div>
-            <div class="text-sm font-semibold">
-              {entry.data.role}
+            <div class="text-sm font-semibold text-spaghetti-brown/100 dark:text-spaghetti-yellow">
+              {entry.role}
             </div>
-            <article class="prose dark:prose-invert">
-              <entry.Content />
-            </article>
+            <article class="prose dark:prose-invert text-spaghetti-brown/100 dark:text-spaghetti-cream" set:html={entry.contentHtml}></article>
           </li>
         ))
       }
     </ul>
+
   </BottomLayout>
 </PageLayout>
