@@ -1,16 +1,16 @@
-import type { CollectionEntry } from "astro:content"
+import type { Project } from "@lib/appwrite-service"
 import { createEffect, createSignal, For } from "solid-js"
 import ArrowCard from "@components/ArrowCard"
 import { cn } from "@lib/utils"
 
 type Props = {
   tags: string[]
-  data: CollectionEntry<"projects">[] | any[]
+  data: Project[] | any[]
 }
 
 export default function Projects({ data, tags }: Props) {
   const [filter, setFilter] = createSignal(new Set<string>())
-  const [projects, setProjects] = createSignal<CollectionEntry<"projects">[]>([])
+  const [projects, setProjects] = createSignal<Project[]>([])
 
   createEffect(() => {
     setProjects(data.filter((entry) => 

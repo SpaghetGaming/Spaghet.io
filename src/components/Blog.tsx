@@ -1,16 +1,16 @@
-import type { CollectionEntry } from "astro:content"
+import type { BlogPost } from "@lib/appwrite-service"
 import { createEffect, createSignal, For } from "solid-js"
 import ArrowCard from "@components/ArrowCard"
 import { cn } from "@lib/utils"
 
 type Props = {
   tags: string[]
-  data: CollectionEntry<"blog">[] // Simplified to just Astro content for now
+  data: BlogPost[] // Using Appwrite data instead of Astro content collections
 }
 
 export default function Blog({ data, tags }: Props) {
   const [filter, setFilter] = createSignal(new Set<string>())
-  const [posts, setPosts] = createSignal<CollectionEntry<"blog">[]>([])
+  const [posts, setPosts] = createSignal<BlogPost[]>([])
 
   createEffect(() => {
     setPosts(data.filter((entry) => {
