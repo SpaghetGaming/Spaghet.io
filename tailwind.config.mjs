@@ -61,6 +61,7 @@ export default {
       animation: {
         twinkle: "twinkle 2s ease-in-out forwards",
         meteor: "meteor 3s ease-in-out forwards",
+        meatball: "meatball 3s ease-in-out forwards",
       },
       keyframes: {
         twinkle: {
@@ -78,6 +79,19 @@ export default {
           },
         },
         meteor: {
+          "0%": { 
+            opacity: 0, 
+            transform: "translateY(200%)" 
+          },
+          "50%": { 
+            opacity: 1  
+          },
+          "100%": { 
+            opacity: 0, 
+            transform: "translateY(0)" 
+          },
+        },
+        meatball: {
           "0%": { 
             opacity: 0, 
             transform: "translateY(200%)" 

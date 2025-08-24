@@ -1,0 +1,42 @@
+---
+/**
+ * Meatballs.astro
+ * This component creates meatballs that are appended to the galaxy on interval.
+ * Meatballs are removed from the document after the animation is completed.
+ * There are four (4) meatball shower containers, one for each diagonal direction.
+ */
+---
+
+<div id="meatballs">
+  <!-- rotations defined in base.css & tailwind.config.mjs -->
+  <div class="shower ur" />
+  <div class="shower dr" /> 
+  <div class="shower dl" />
+  <div class="shower ul" />
+</div>
+
+<script>
+  function createMeatball () {
+  // create a meatball
+  let meatball = document.createElement("div");
+  meatball.setAttribute("class", "meatball");
+  meatball.style.left = Math.round(Math.random() * window.innerWidth) + "px";
+  meatball.style.top  = Math.round(Math.random() * window.innerHeight) + "px";
+  
+  // append the meatball to a random meatball shower (direction)
+  const showers = document.querySelectorAll(".shower");
+  if (showers.length > 0) {
+    const random = Math.floor(Math.random() * showers.length);
+    const shower = showers[random];
+    shower.append(meatball);
+  }
+
+  // remove the meatball after the animation duration
+  setTimeout(() => {
+    meatball.remove();
+  }, 3500);
+}
+
+// Create meatballs on interval on two (2) seconds
+setInterval(createMeatball, 1500);
+</script>

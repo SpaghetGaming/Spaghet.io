@@ -280,6 +280,50 @@ article img {
   @apply rotate-315;
 }
 
+/**
+ * TWINKLE NOODLES
+ */
+
+ #noodle.template {
+  @apply absolute -left-full; /* hide offscreen */
+}
+
+#noodle.twinkle {
+  @apply animate-twinkle; /* defined in tailwind.config */
+}
+
+
+/**
+ * Meatballs
+ */
+
+#meatballs .shower {
+  @apply absolute inset-0 top-0;;
+  @apply left-1/2 -translate-x-1/2;
+  @apply w-screen aspect-square;
+}
+
+#meatballs .meatball {
+  @apply animate-meatball; /* defined in tailwind.config */
+  @apply absolute top-1/2 left-1/2 w-px h-[75vh];
+  @apply bg-gradient-to-b from-white to-transparent;
+}
+
+#meatballs .shower.ur {
+  @apply rotate-45;
+}
+
+#meatballs .shower.dr {
+  @apply rotate-135;
+}
+
+#meatballs .shower.dl {
+  @apply rotate-225;
+}
+
+#meatballs .shower.ul {
+  @apply rotate-315;
+}
 .copy-cnt{
   @apply absolute w-full;
   top:var(--copy-btn-margin);

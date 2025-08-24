@@ -4,8 +4,8 @@ import PageLayout from "@layouts/PageLayout.astro"
 import ArrowCard from "@components/ArrowCard"
 import StackCard from "@components/StackCard.astro"
 import { SITE, SOCIALS } from "@consts"
-import TwinklingStars from "@components/TwinklingStars.astro"
-import MeteorShower from "@components/MeteorShower.astro"
+import NoodleTwinklingStars from "@components/NoodleTwinklingStars.astro"
+import MeatballShower from "@components/MeatballShower.astro"
 
 // Fetch blog posts and projects from Appwrite
 const posts = (await getBlogPosts())
@@ -66,8 +66,8 @@ const stack = [
   <!-- Dark Theme: Twinkling Stars / Meteor Shower -->
   <div id="galaxy" class="fixed inset-0">
     <div class="hidden dark:block">
-      <TwinklingStars/>
-      <MeteorShower/>
+      <NoodleTwinklingStars/>
+      <MeatballShower/>
     </div>
   </div>
 
