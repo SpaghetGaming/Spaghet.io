@@ -114,7 +114,7 @@ export default function Search(props: Props) {
               <div class="border-t border-spaghetti-yellow/30 pt-4">
                 <div class="text-sm font-bold mb-2">Projects</div>
                 <ul class="flex flex-col gap-3">
-                  {results().projects.map((result, index) => (
+                  {results().projects.map(result => (
                     <li>
                       <ArrowCard entry={result} pill={true} collection={'projects'} />
                     </li>

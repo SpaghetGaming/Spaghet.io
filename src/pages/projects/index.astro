@@ -15,7 +15,7 @@ const page = parseInt(pageParam)
 const limit = parseInt(limitParam)
 
 // Fetch paginated projects
-const { posts, total } = await getProjectsPaginated(page, limit)
+const { posts } = await getProjectsPaginated(page, limit)
   .then(result => {
     console.log(result)
     return result;

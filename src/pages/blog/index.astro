@@ -4,7 +4,7 @@ import TopLayout from "@layouts/TopLayout.astro"
 import BottomLayout from "@layouts/BottomLayout.astro"
 import Blog from "@components/Blog"
 import { BLOG } from "@consts"
-import { getBlogPosts, getBlogPostsPaginated } from "@lib/appwrite-service"
+import { getBlogPostsPaginated } from "@lib/appwrite-service"
 
 // Get page and limit from URL parameters
 const url = new URL(typeof window !== 'undefined' ? window.location.href : 'http://localhost')
@@ -14,7 +14,7 @@ const page = parseInt(pageParam)
 const limit = parseInt(limitParam)
 
 // Fetch paginated blog posts
-const { posts, total } = await getBlogPostsPaginated(page, limit)
+const { posts } = await getBlogPostsPaginated(page, limit)
   .then(result => {
     return result;
   })

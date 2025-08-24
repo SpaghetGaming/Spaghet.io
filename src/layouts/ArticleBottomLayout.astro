@@ -1,6 +1,5 @@
 ---
 import type { BlogPost, Project } from "@lib/appwrite-service"
-import { formatDate, readingTime } from "@lib/utils"
 import { getBlogPosts, getProjects } from "@lib/appwrite-service"
 
 type Props = {
@@ -72,7 +71,7 @@ if (collection === "blog") {
       </a>
     )}
     {nextEntry && (
-      <a href={`/${collection}/${nextEntry.$id}`} class="group p-4 gap-3 flex items-center border rounded-lg hover:bg-black/5 hover:dark:bg-spaghetti-cream/10 border-black/15 dark:border-spaghetti-cream/20 transition-colors duration-300 ease-in-out">
+      <a href={`/${collection}/${nextEntry.$id}`} class="group p-4 gap-3 flex items-center border rounded-lg hover:bg-black/5 hover:dark:bg-spaghetti-cream/10 border-black/15 dark:border-spaghetti-cream/20 transition-colors duration-300 ease-in-out blend dark:text-spaghetti-cream">
         <div class="w-full h-full text-right group-hover:text-spaghetti-brown/80 group-hover:dark:text-spaghetti-cream blend">
           <div class="text-sm uppercase">
             Next
@@ -81,14 +80,14 @@ if (collection === "blog") {
             {nextEntry.title}
           </div>
         </div>
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="stroke-current group-hover:stroke-black group-hover:dark:stroke-white">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="stroke-current group-hover:stroke-black group-hover:dark:stroke-white blend">
           <line x1="5" y1="12" x2="19" y2="12" class="scale-x-0 group-hover:scale-x-100 translate-x-4 group-hover:translate-x-1 transition-all duration-300 ease-in-out" />
           <polyline points="12 5 19 12 12 19" class="translate-x-0 group-hover:translate-x-1 transition-all duration-300 ease-in-out" />
         </svg>
       </a>
     )}
     {!prevEntry && !nextEntry && (
-      <div class="col-span-2 text-center py-8 text-gray-500">
+      <div class="col-span-2 text-center py-8 text-gray-500 blend">
         No adjacent articles available
       </div>
     )}

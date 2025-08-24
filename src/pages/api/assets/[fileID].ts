@@ -1,5 +1,5 @@
 import { type APIRoute } from 'astro';
-import { getFileUrl, getFilePreviewUrl, getFileDownloadUrl } from '../../../lib/appwrite-service.ts';
+import { getFileUrl, getFilePreviewUrl } from '../../../lib/appwrite-service.ts';
 
 export const GET: APIRoute = async ({ params, request }) => {
   const { fileID } = params;

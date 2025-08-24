@@ -1,42 +1,37 @@
 ---
-import { type CollectionEntry, getCollection } from "astro:content"
 import PageLayout from "@layouts/PageLayout.astro"
 import TopLayout from "@layouts/TopLayout.astro"
 import BottomLayout from "@layouts/BottomLayout.astro"
 import { formatDate } from "@lib/utils"
 import { SITE } from "@consts"
+import { getLegalDocuments } from "@lib/appwrite-service"
 
-// Create the static pages for legal docs
-export async function getStaticPaths() {
-	const docs = await getCollection("legal")
-	return docs.map((doc) => ({
-		params: { slug: doc.slug },
-		props: doc,
-	}))
+// Get the requested legal doc (simplified approach)
+const legalDocs = await getLegalDocuments()
+const doc = legalDocs.find(d => d.$id === Astro.params.slug) || null
+
+if (!doc) {
+  // Handle case where document is not found
+  return new Response("Not Found", { status: 404 })
 }
 
-// Get the requested legal doc
-type Props = CollectionEntry<"legal">;
-const doc = Astro.props
-const { title, date } = doc.data
-const { Content } = await doc.render();
+// Skip render() call since we're using Appwrite data directly
+// const { Content } = await doc.render();
 
 ---
 
-<PageLayout title={title} description={`${title} for ${SITE.TITLE}`}>
+<PageLayout title={doc.title} description={`${doc.title} for ${SITE.TITLE}`}>
   <TopLayout>
     <div class="animate">
       <div class="page-heading">
-        {title}
+        {doc.title}
       </div>
       <p class="font-normal opacity-75">
-        Last updated: {formatDate(date)}
+        Last updated: {formatDate(doc.date)}
       </p>
     </div>
   </TopLayout>
   <BottomLayout>
-    <article class="animate">
-      <Content/>
-    </article>
+    <article class="animate prose dark:prose-invert text-spaghetti-brown/100 dark:text-spaghetti-cream" set:html={doc.contentHtml}></article>
   </BottomLayout>
 </PageLayout>

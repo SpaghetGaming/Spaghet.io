@@ -93,7 +93,7 @@ if (typeof window === 'undefined') {
 } else {
   blogCollection = import.meta.env.PUBLIC_APPWRITE_BLOG_COLLECTION_ID || 'blog';
   projectsCollection = import.meta.env.PUBLIC_APPWRITE_PROJECTS_COLLECTION_ID || "projects";
-  workCollection = import.meta.env.PUBLIC_APPWRITE_WORK_COLLECTION_ID || "work";
+  workCollection = import.meta.env.PUBLIC_APPwrite_WORK_COLLECTION_ID || "work";
   legalCollection = import.meta.env.PUBLIC_APPWRITE_LEGAL_COLLECTION_ID || "legal";
   databaseID = import.meta.env.PUBLIC_APPWRITE_DATABASE_ID || "main";
 }
@@ -295,7 +295,7 @@ export async function getLegalDocuments(): Promise<LegalDocument[]> {
   try {
     const response = await databases.listDocuments<LegalDocument>(
       databaseID,
-      workCollection
+      legalCollection
     );
     
     return response.documents;
