@@ -1,9 +1,11 @@
 services:
-  astro-app:
+  spaghet-home:
+    container_name: spaghet-home
+    network_mode: bridge
     build:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "4321:4321"
+      - "4321:80"
     volumes:
       - .:/app

@@ -1,29 +1,18 @@
-FROM node:22-alpine AS base
+FROM node:lts-alpine AS builder
+
 WORKDIR /app
 
-# By copying only the package.json and package-lock.json here, we ensure that the following `-deps` steps are independent of the source code.
-# Therefore, the `-deps` steps will be skipped if only the source code changes.
-COPY package.json package-lock.json ./
+COPY package*.json ./
+RUN npm ci
 
-FROM base AS prod-deps
-RUN npm install --omit=dev
-
-FROM base AS build-deps
-RUN npm install
-
-FROM build-deps AS build
 COPY . .
 RUN npm run build
 
-FROM base AS runtime
-COPY --from=prod-deps /app/node_modules ./node_modules # Copy dependencies
-COPY --from=build /app/dist ./dist # Copy the built output
+# Stage 2: Serve the static files with a lightweight web server
+FROM nginx:alpine
 
-# Bind to all interfaces
-ENV HOST=0.0.0.0
-# Port to listen on
-ENV PORT=4321
-# Just convention, not required
-EXPOSE 4321
+COPY --from=builder /app/dist /usr/share/nginx/html
 
-CMD node ./dist/server/entry.mjs # Start the app
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]
