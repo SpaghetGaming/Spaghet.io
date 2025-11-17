@@ -1,6 +1,10 @@
 FROM node:lts-alpine AS builder
-
+# Install git if it's not already present in the base image
+RUN apk add --no-cache git
 WORKDIR /app
+# Clone the GitHub repository
+# Replace <your-username> and <your-repository> with your actual GitHub details
+RUN git clone -b manual https://github.com/SpaghetGaming/Spaghet.io.git  .
 
 COPY package*.json ./
 RUN npm ci
