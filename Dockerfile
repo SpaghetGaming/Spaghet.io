@@ -5,7 +5,7 @@ WORKDIR /app
 # Install git and clone the repository
 RUN apk add --no-cache git
 ARG REPO_URL
-RUN git clone $REPO_URL .
+RUN git clone -b $REPO_BRANCH $REPO_URL .
 
 # Install dependencies and build the project
 RUN npm install
