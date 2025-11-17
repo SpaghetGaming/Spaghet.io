@@ -1,0 +1,23 @@
+# Node.js related
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-store/
+
+# Build output
+dist/
+.astro/
+
+# Git related
+.git/
+.gitignore
+
+# Environment variables
+.env
+.env.*.local
+
+# Editor/OS specific
+.DS_Store
+Thumbs.db
+.vscode/

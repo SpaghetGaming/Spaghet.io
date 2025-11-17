@@ -23,3 +23,7 @@ settings.json
 
 # macOS-specific files
 .DS_Store
+
+#Docker Ignore
+Dockerfile
+docker-compose.yml
